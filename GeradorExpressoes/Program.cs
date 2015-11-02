@@ -15,6 +15,7 @@ namespace GeradorExpressoes
         {
             System.Console.WriteLine("Inicio do Programa");
 
+            // parametros para o inicio da execução
             int populationSize = 100;
             int iterations = 1000;
             int selectionMethod = 0;
@@ -30,6 +31,7 @@ namespace GeradorExpressoes
 
             double[,] data = null;
 
+            // leitura e impressoa dos dados do dataset
             data = (new LoadData()).leituraArquivo(nomeArq);
 
             for (int i = 0; i < data.GetLength(0); i++)
@@ -37,12 +39,15 @@ namespace GeradorExpressoes
                 System.Console.WriteLine(String.Format("{0:N}", data[i, 0]) + ", " + String.Format("{0:N}", data[i, 1]));
             }
 
-            // Create the thread object. This does not start the thread.
+            // Criação do objeto solução
             Solution solution = new Solution(data, populationSize, iterations, selectionMethod, functionsSet, geneticMethod, needToStop, dataset);
 
+            // Criação do objeto do thread. Não inicia o thread.
             workerThread = new Thread(new ThreadStart(solution.SearchSolution));
 
+            // Inicia o thread.
             workerThread.Start();
+
             System.Console.WriteLine("Iniciando a busca ...");
         }
 

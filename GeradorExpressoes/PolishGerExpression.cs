@@ -36,7 +36,7 @@ namespace AForge
     /// <para>Sample usage:</para>
     /// <code>
     /// // expression written in polish notation
-    /// string expression = "2 $0 / 3 $1 * +";
+    /// string expression = " $20 / 3 $1 * +";
     /// // variables for the expression
     /// double[] vars = new double[] { 3, 4 };
     /// // expression evaluation

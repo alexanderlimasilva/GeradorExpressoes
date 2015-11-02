@@ -12,11 +12,9 @@ namespace GeradorExpressoes
         private enum Rank { Primary, Unary, Mul, Sum, }
         private static Dictionary<string, Rank> _rank = new Dictionary<string, Rank>()
         {
-            { "#", Rank.Unary },                  // unary minus is coded as "#", unary plus is left out
-            { "*", Rank.Mul }, { "/", Rank.Mul }, 
-            { "^", Rank.Mul }, { "ln", Rank.Mul }, 
-            { "square", Rank.Mul }, { "exp", Rank.Mul }, { "sqrt", Rank.Mul },
-            { "+", Rank.Sum }, { "-", Rank.Sum }, // binary op
+            { "#", Rank.Unary }, { "square", Rank.Unary }, { "exp", Rank.Unary }, { "sqrt", Rank.Unary }, { "ln", Rank.Unary  },  // unary minus is coded as "#", unary plus is left out
+            { "*", Rank.Mul }, { "/", Rank.Mul }, { "^", Rank.Mul },  
+            { "+", Rank.Sum }, { "-", Rank.Sum },                     // binary op
         };
 
         // base class
@@ -82,7 +80,7 @@ namespace GeradorExpressoes
         }
 
         // scanner
-        private static string _tokenizer = @"\s*(\d+|\S)\s*";
+        //private static string _tokenizer = @"\s*(\d+|\S)\s*";
         private static string[] _unary = new string[] { "#" };
 
         private static bool IsNumber(string token)
@@ -98,7 +96,6 @@ namespace GeradorExpressoes
         private RPN2Infix(string input)
         {
             //Tokens = Regex.Matches(input, _tokenizer, RegexOptions.Compiled|RegexOptions.Singleline).Cast<Match>().Select(m=>m.Groups[1].Value);
-
             Tokens = input.Split(' ');
             Stack = new Stack<Expr>();
         }
@@ -153,7 +150,7 @@ namespace GeradorExpressoes
                     // Push the new intermediate expression on the stack
                     stack.Push(new Intermediate(newExpr, token));
                 }
-                else if (token == "*" || token == "/")
+                else if (token == "*" || token == "/" || token == "^")
                 {
                     string leftExpr, rightExpr;
 
@@ -189,6 +186,43 @@ namespace GeradorExpressoes
                     // Push the new intermediate expression on the stack
                     stack.Push(new Intermediate(newExpr, token));
                 }
+                else if (token == "ln" || token == "sqrt" || token == "exp" || token == "square")
+                {
+                    string leftExpr, rightExpr;
+
+                    // Get the intermediate expressions from the stack.  
+                    // If an intermediate expression was constructed using a lower precedent
+                    // operator (+ or -), we must place parentheses around it to ensure 
+                    // the proper order of evaluation.
+
+                    var rightIntermediate = stack.Pop();
+                    //if (rightIntermediate.oper == "+" || rightIntermediate.oper == "-")
+                    //{
+                    //    rightExpr = "(" + rightIntermediate.expr + ")";
+                    //}
+                    //else
+                    //{
+                    //    rightExpr = rightIntermediate.expr;
+                    //}
+                    rightExpr = "(" + rightIntermediate.expr + ")";
+
+                    //var leftIntermediate = stack.Pop();
+                    //if (leftIntermediate.oper == "+" || leftIntermediate.oper == "-")
+                    //{
+                    //    leftExpr = "(" + leftIntermediate.expr + ")";
+                    //}
+                    //else
+                    //{
+                    //    leftExpr = leftIntermediate.expr;
+                    //}
+
+                    // construct the new intermediate expression by combining the left and right 
+                    // using the operator (token).
+                    var newExpr = token + rightExpr;
+
+                    // Push the new intermediate expression on the stack
+                    stack.Push(new Intermediate(newExpr, token));
+                }
                 else
                 {
                     // Must be a number. Push it on the stack.
@@ -197,6 +231,7 @@ namespace GeradorExpressoes
             }
 
             // The loop above leaves the final expression on the top of the stack.
+            System.Console.WriteLine(stack.Peek().expr);
             return stack.Peek().expr;
         }
 

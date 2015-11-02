@@ -10,7 +10,7 @@ namespace GeradorExpressoes
     using AForge.Genetic;
 
     /// <summary>
-    /// Fitness function for symbolic regression (function approximation) problem
+    /// Fitness function for symbolic regression problem
     /// </summary>
     /// 
     /// <remarks><para>The fitness function calculates fitness value of
@@ -26,8 +26,7 @@ namespace GeradorExpressoes
     ///	// constants
     ///	double[] constants = new double[5] { 1, 2, 3, 5, 7 };
     ///	// function to be approximated
-    ///	double[,] data = new double[5, 2] {
-    ///		{1, 1}, {2, 3}, {3, 6}, {4, 10}, {5, 15} };
+    ///	double[,] data = dada from dataset;
     ///	// create population
     ///	Population population = new Population( 100,
     ///		new GPTreeChromosome( new SimpleGeneFunction( 1 + constants.Length ) ),
@@ -45,8 +44,6 @@ namespace GeradorExpressoes
         private double[,]	data;
         // varibles
         private double[]	variables;
-
-        WriteData saida = new WriteData();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolicRegressionFitness"/> class.
