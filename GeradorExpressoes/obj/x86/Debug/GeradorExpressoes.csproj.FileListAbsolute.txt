@@ -1,0 +1,40 @@
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.csprojResolveAssemblyReference.cache
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\GeradorExpressoes.exe
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\GeradorExpressoes.pdb
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Video.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Imaging.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.dll
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.pdb
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.pdb
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Video.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Imaging.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.pdb
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.xml
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.exe
+D:\Projetos\IntegracaoDEDICVS2010\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.exe
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\GeradorExpressoes.exe
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\GeradorExpressoes.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Video.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Imaging.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.dll
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Video.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Imaging.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.pdb
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.xml
+D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.csprojResolveAssemblyReference.cache
