@@ -10,6 +10,8 @@ namespace AForge
 {
     using System;
     using System.Collections;
+    using System.Text;
+    using System.Collections.Generic;
 
     // Quick and dirty implementation of polish expression evaluator
 
@@ -77,7 +79,16 @@ namespace AForge
                 else if ( token[0] == '$' )
                 {
                     // the token is variable
-                    arguments.Push( variables[int.Parse( token.Substring( 1 ) )] );
+                    int index = int.Parse(token.Substring(1));
+
+                    if ( variables == null )
+                            throw new ArgumentNullException( "variables", "Cannot reference variables if none are supplied." );
+                    if ( index >= variables.Length )
+                            throw new ArgumentOutOfRangeException( "variable number", index, "Cannot reference variables beyond the " + variables.Length + " supplied." );
+
+                    arguments.Push(variables[index]);
+                    //arguments.Push(variables[int.Parse(token.Substring(1))]);
+                
                 }
                 else
                 {
@@ -140,5 +151,58 @@ namespace AForge
             // return the only value from stack
             return (double) arguments.Pop( );
         }
+
+        /// <summary>
+        /// Performs (partial) variable-substitution in the specified expression.
+        /// </summary>
+        /// 
+        /// <remarks><para>If an insufficient number of variables are supplied, this will
+        /// substitute values for the supplied variables (0 through m), and renumber the
+        /// remaining variables from m+1 through n to 0 through n-m-1</para>
+        /// 
+        /// <code>
+        /// string expression = PolishExpression.SubstituteVariables( "$0 $1 +", new double[] { 3 } );
+        /// // expression is now "3 $0 +".
+        /// </code>
+        /// </remarks>
+        ///
+        /// <param name="expression">Expression written in postfix polish notation.</param>
+        /// <param name="variables">Variables for the expression.</param>
+        /// 
+        /// <returns>Expression with variable substitution performed.</returns>
+        /// 
+        public static string SubstituteVariables( string expression, double[] variables )
+        {
+            string[] tokens = expression.Trim().Split(' ');
+
+            StringBuilder ret = new StringBuilder( );
+
+            int length = variables == null ? 0 : variables.Length;
+
+            // walk through all tokens
+            foreach ( string token in tokens )
+            {
+                if ( token[0] == '$' )
+                {
+                    // the token is variable
+                    //arguments.Push( variables[int.Parse( token.Substring( 1 ) )] );
+                    int index = Int32.Parse( token.Substring( 1 ) );
+
+                    if ( index < length )
+                        ret.Append( variables[index] );
+                    else
+                        ret.Append( "$" + ( index - length ) );
+                }
+                 else
+                    ret.Append( token );
+
+                ret.Append( ' ' );
+            }
+            ret.Remove( ret.Length - 1, 1 );
+
+            return ret.ToString( );
+        }
+
     }
+
 }

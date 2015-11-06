@@ -38,7 +38,7 @@ namespace GeradorExpressoes
         public void SearchSolution()
         {
             // create fitness function
-            MMREFitness fitness = new MMREFitness(data, new double[] { 1, 2, 3, 5, 7 });
+            MMREFitness fitness = new MMREFitness(data, new double[] { 1, 2, 3, 5, 7, 9, 11, 13, 17 });
 
             // create gene function
             IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(6) : (IGPGene)new ExpressionGeneFunction(9);
@@ -58,28 +58,28 @@ namespace GeradorExpressoes
 
             // solution array
             double[,] solution = new double[data.GetLength(0), 2];
-            double[] input = new double[6] { 0, 1, 2, 3, 5, 7 };
+            double[] input = new double[9] { 0, 1, 2, 3, 5, 7, 9, 11, 13 };
 
             // acha menor valor e maior
-            float minX = float.MaxValue;
-            float maxX = float.MinValue;
+            //float minX = float.MaxValue;
+            //float maxX = float.MinValue;
 
             // search for min value
-            for (int j = 0; j < data.GetLength(0); j++)
-            {
-                if (data[i, 0] < minX)
-                    minX = (float) data[i, 0];
+            //for (int j = 0; j < data.GetLength(0); j++)
+            //{
+            //    if (data[i, 0] < minX)
+            //        minX = (float) data[i, 0];
 
-                // search for max value
-                if (data[i, 0] > maxX)
-                    maxX = (float) data[i, 0];
-            }
+            //    // search for max value
+            //    if (data[i, 0] > maxX)
+            //        maxX = (float) data[i, 0];
+            //}
 
             // calculate X values to be used with solution function
-            for (int j = 0; j < data.GetLength(0); j++)
-            {
-                solution[j, 0] = minX + (double)j * (maxX - minX) / data.GetLength(0)-1;
-            }
+            //for (int j = 0; j < data.GetLength(0); j++)
+            //{
+            //    solution[j, 0] = minX + (double)j * (maxX - minX) / data.GetLength(0)-1;
+            //}
 
             // loop
             while (!needToStop)
@@ -98,7 +98,6 @@ namespace GeradorExpressoes
                         input[0] = solution[j, 0];
                         solution[j, 1] = PolishGerExpression.Evaluate(bestFunction, input);
                     }
-                    //chart.UpdateDataSeries("solution", solution);
 
                     // calculate error
                     double error = 0.0;
@@ -111,8 +110,6 @@ namespace GeradorExpressoes
                 }
                 catch
                 {
-                    // remove any solutions from chart in case of any errors
-                    //chart.UpdateDataSeries("solution", null);
                     System.Console.WriteLine("Erro");
                 }
 
@@ -126,14 +123,19 @@ namespace GeradorExpressoes
 
             // show solution
             //System.Console.WriteLine(population.BestChromosome.ToString());
+            string expressao = population.BestChromosome.ToString().Trim();
+            string expressaosubst = PolishGerExpression.SubstituteVariables(expressao, input);
+
             string resultado = "";
-            resultado = population.BestChromosome.ToString().Trim() + "\r\n";
-            resultado = resultado + RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Trim());
+            resultado = expressao + "\r\n";
+            resultado = resultado + RPN2Infix.PostfixToInfix(expressao) + "\r\n";
+            resultado = resultado + expressaosubst + "\r\n";
+            resultado = resultado + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
 
             //saida.escreveArquivo(population.BestChromosome.ToString().Trim(), dataset);
             //System.Console.WriteLine(RPN2Infix.Parse(population.BestChromosome.ToString().Replace("$","")));
             //System.Console.WriteLine(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "").Trim()));
-            //saida.escreveArquivo(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "")), "EXpressao");
+            //saida.escreveArquivo(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "")), "Expressao");
 
             saida.escreveArquivo(resultado, dataset);
 
