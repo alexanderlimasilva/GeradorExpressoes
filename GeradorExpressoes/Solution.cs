@@ -41,7 +41,7 @@ namespace GeradorExpressoes
             MMREFitness fitness = new MMREFitness(data, new double[] { 1, 2, 3, 5, 7, 9, 11, 13, 17 });
 
             // create gene function
-            IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(6) : (IGPGene)new ExpressionGeneFunction(9);
+            IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(6) : (IGPGene)new ExpressionGeneFunction(10);
 
             // create population
             Population population = new Population(populationSize, (geneticMethod == 0) ?
@@ -60,26 +60,13 @@ namespace GeradorExpressoes
             double[,] solution = new double[data.GetLength(0), 2];
             double[] input = new double[9] { 0, 1, 2, 3, 5, 7, 9, 11, 13 };
 
-            // acha menor valor e maior
-            //float minX = float.MaxValue;
-            //float maxX = float.MinValue;
-
-            // search for min value
-            //for (int j = 0; j < data.GetLength(0); j++)
-            //{
-            //    if (data[i, 0] < minX)
-            //        minX = (float) data[i, 0];
-
-            //    // search for max value
-            //    if (data[i, 0] > maxX)
-            //        maxX = (float) data[i, 0];
-            //}
-
-            // calculate X values to be used with solution function
-            //for (int j = 0; j < data.GetLength(0); j++)
-            //{
-            //    solution[j, 0] = minX + (double)j * (maxX - minX) / data.GetLength(0)-1;
-            //}
+            
+            // Alexander - rever esta funcao
+            // calculate X values to be used with solution function  (rever isso)
+            for (int j = 0; j < data.GetLength(0); j++)
+            {
+                solution[j, 0] = data[i, 1];
+            }
 
             // loop
             while (!needToStop)

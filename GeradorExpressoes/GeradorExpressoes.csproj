@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ExpressionGeneFunction.cs" />
     <Compile Include="Intermediate.cs" />
+    <Compile Include="IRandomNumberGenerator.cs" />
     <Compile Include="LoadData.cs" />
     <Compile Include="MMREFitness.cs" />
     <Compile Include="RPN2Infix.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solution.cs" />
+    <Compile Include="UniformGenerator.cs" />
+    <Compile Include="UniformOneGenerator.cs" />
     <Compile Include="WriteData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

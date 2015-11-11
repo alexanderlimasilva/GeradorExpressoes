@@ -51,13 +51,17 @@ namespace GeradorExpressoes
             /// <summary>
             /// Square root function.
             /// </summary>
-            Sqrt = 8
+            Sqrt = 8,
+            /// <summary>
+            /// Random numbers function.
+            /// </summary>
+            Erc = 9
         }
 
         /// <summary>
         /// Number of different functions supported by the class.
         /// </summary>
-        protected const int FunctionsCount = 9;
+        protected const int FunctionsCount = 10;
 
         // gene type
         private GPGeneType	type;
@@ -72,6 +76,9 @@ namespace GeradorExpressoes
         /// Random number generator for chromosoms generation.
         /// </summary>
         protected static ThreadSafeRandom rand = new ThreadSafeRandom( );
+
+        // create instance of random generator
+        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 100));
 
         /// <summary>
         /// Gene type.
@@ -187,6 +194,10 @@ namespace GeradorExpressoes
 
                     case Functions.Sqrt:		// square root
                         return "sqrt";
+
+                    case Functions.Erc:		    // constant random numbers
+                        float randomNumber = generator.Next();
+                        return randomNumber.ToString();
                 }
             }
 

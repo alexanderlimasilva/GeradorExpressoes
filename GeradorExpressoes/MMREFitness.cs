@@ -80,7 +80,7 @@ namespace GeradorExpressoes
         /// <remarks>The method calculates fitness value of the specified
         /// chromosome.</remarks>
         ///
-        public double Evaluate( IChromosome chromosome )
+        public double Evaluate(IChromosome chromosome)  //IChromosome
         {           
             // get function in polish notation
             string function = chromosome.ToString( );
