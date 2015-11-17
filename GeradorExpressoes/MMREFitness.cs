@@ -61,12 +61,20 @@ namespace GeradorExpressoes
         /// genetic expression equals to the amount of constants plus one - the <b>x</b> variable.</para>
         /// </remarks>
         /// 
-        public MMREFitness( double[,] data, double[] constants )
+        public MMREFitness(double[,] data)   //, double[] constants
         {
             this.data = data;
             // copy constants
-            variables = new double[constants.Length + 1];
-            Array.Copy( constants, 0, variables, 1, constants.Length );
+            //variables = new double[constants.Length + 1];
+            variables = new double[data.GetLength(0)];
+
+            //Array.Copy( constants, 0, variables, 1, constants.Length );
+            //Array.Copy(data[0,0], 0, variables, 0, data.GetLength(0));
+
+            for (int j = 0; j < data.GetLength(0); j++)
+            {
+                variables[j] = data[j, 0];
+            }
         }
 
         /// <summary>
@@ -90,7 +98,7 @@ namespace GeradorExpressoes
             for ( int i = 0, n = data.GetLength( 0 ); i < n; i++ )
             {
                 // put next X value to variables list
-                variables[0] = data[i, 0];
+                // variables[0] = data[i, 0];
                 // avoid evaluation errors
                 try
                 {

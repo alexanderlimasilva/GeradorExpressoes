@@ -38,7 +38,7 @@ namespace GeradorExpressoes
         public void SearchSolution()
         {
             // create fitness function
-            MMREFitness fitness = new MMREFitness(data, new double[] { 1, 2, 3, 5, 7, 9, 11, 13, 17 });
+            MMREFitness fitness = new MMREFitness(data);
 
             // create gene function
             IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(6) : (IGPGene)new ExpressionGeneFunction(10);
@@ -58,7 +58,7 @@ namespace GeradorExpressoes
 
             // solution array
             double[,] solution = new double[data.GetLength(0), 2];
-            double[] input = new double[9] { 0, 1, 2, 3, 5, 7, 9, 11, 13 };
+            double[] input = new double[data.GetLength(0)];
 
             
             // Alexander - rever esta funcao
