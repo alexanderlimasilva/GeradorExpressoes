@@ -78,7 +78,7 @@ namespace GeradorExpressoes
         protected static ThreadSafeRandom rand = new ThreadSafeRandom( );
 
         // create instance of random generator
-        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 100));
+        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 1));
 
         /// <summary>
         /// Gene type.
