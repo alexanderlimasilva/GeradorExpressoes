@@ -11,10 +11,8 @@ namespace GeradorExpressoes
 {   
     public class Solution
     {
+
         double[,] data = null;
-
-        WriteData saida = new WriteData();
-
         int populationSize;
         int iterations;
         int selectionMethod;
@@ -82,7 +80,7 @@ namespace GeradorExpressoes
                     // calculate best function
                     for (int j = 0; j < data.GetLength(0); j++)
                     {
-                        input[0] = solution[j, 0];
+                        input[j] = data[j, 0];
                         solution[j, 1] = PolishGerExpression.Evaluate(bestFunction, input);
                     }
 
@@ -124,6 +122,7 @@ namespace GeradorExpressoes
             //System.Console.WriteLine(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "").Trim()));
             //saida.escreveArquivo(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "")), "Expressao");
 
+            WriteData saida = new WriteData();
             saida.escreveArquivo(resultado, dataset);
 
             System.Console.WriteLine("Fim do Programa");
