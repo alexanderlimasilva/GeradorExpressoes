@@ -202,7 +202,8 @@ namespace GeradorExpressoes
             }
 
             // get argument string representation
-            return string.Format( "${0}", val );
+            //return string.Format( "${0}", val );
+            return string.Format("x", val);
         }
 
         /// <summary>

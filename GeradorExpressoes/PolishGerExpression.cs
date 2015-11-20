@@ -75,10 +75,11 @@ namespace AForge
                 {
                     // the token in numeric argument
                     arguments.Push( double.Parse( token ) );
+
                 }
                 else if ( token[0] == '$' )
                 {
-                    // the token is variable
+                    // the token is variable in $ format
                     int index = int.Parse(token.Substring(1));
 
                     if ( variables == null )
@@ -90,6 +91,13 @@ namespace AForge
                     //arguments.Push(variables[int.Parse(token.Substring(1))]);
                 
                 }
+                else if (token[0] == 'x')
+                {
+                    // the token is variable
+                    int index = 0;
+                    arguments.Push(variables[index]);
+                }
+
                 else
                 {
                     // each function has at least one argument, so let's get the top one
@@ -116,7 +124,7 @@ namespace AForge
                             break;
 
                         case "^":			// potencia
-                            arguments.Push( Math.Pow((double)arguments.Pop(), v) );
+                            arguments.Push( Math.Pow((double) arguments.Pop(), v) );
                             break;
 
                         case "square":		// square
@@ -186,12 +194,13 @@ namespace AForge
                 {
                     // the token is variable
                     //arguments.Push( variables[int.Parse( token.Substring( 1 ) )] );
-                    int index = Int32.Parse( token.Substring( 1 ) );
+                    int index = Int32.Parse(token.Substring(1));
 
-                    if ( index < length )
-                        ret.Append( variables[index] );
+                    if (index < length)
+                        ret.Append(variables[index]);
                     else
-                        ret.Append( "$" + ( index - length ) );
+                        ret.Append("$" + (index - length));
+                    //ret.Append('x');
                 }
                  else
                     ret.Append( token );

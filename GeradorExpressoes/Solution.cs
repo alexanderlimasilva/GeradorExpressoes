@@ -39,7 +39,7 @@ namespace GeradorExpressoes
             MMREFitness fitness = new MMREFitness(data);
 
             // create gene function
-            IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(6) : (IGPGene)new ExpressionGeneFunction(10);
+            IGPGene gene = (functionsSet == 0) ? (IGPGene)new SimpleGeneFunction(data.GetLength(0)) : (IGPGene)new ExpressionGeneFunction(data.GetLength(0));
 
             // create population
             Population population = new Population(populationSize, (geneticMethod == 0) ?
@@ -56,15 +56,17 @@ namespace GeradorExpressoes
 
             // solution array
             double[,] solution = new double[data.GetLength(0), 2];
-            double[] input = new double[data.GetLength(0)];
+            //double[] input = new double[data.GetLength(0)];
+            double[] input = new double[1];
 
             
             // Alexander - rever esta funcao
-            // calculate X values to be used with solution function  (rever isso)
-            for (int j = 0; j < data.GetLength(0); j++)
-            {
-                solution[j, 0] = data[i, 1];
-            }
+            // calculate X values to be used with solution function
+            //for (int j = 0; j < data.GetLength(0); j++)
+            //{
+            //    //solution[j, 0] = data[i, 1];
+            //    variables[0] = data[i, 0];
+            //}
 
             // loop
             while (!needToStop)
@@ -80,16 +82,16 @@ namespace GeradorExpressoes
                     // calculate best function
                     for (int j = 0; j < data.GetLength(0); j++)
                     {
-                        input[j] = data[j, 0];
-                        solution[j, 1] = PolishGerExpression.Evaluate(bestFunction, input);
+                        input[0] = data[j, 1];
+                        solution[j, 0] = PolishGerExpression.Evaluate(bestFunction, input);
                     }
 
                     // calculate error
                     double error = 0.0;
                     for (int j = 0, k = data.GetLength(0); j < k; j++)
                     {
-                        input[0] = data[j, 0];
-                        error += (Math.Abs(data[j, 1] - PolishGerExpression.Evaluate(bestFunction, input)) / (data[j, 1])) / data.GetLength(0) ;
+                        input[0] = data[j, 1];
+                        error += (Math.Abs(PolishGerExpression.Evaluate(bestFunction, input) - data[j, 0]) / (data[j, 0])) / data.GetLength(0);
                     }
 
                 }
