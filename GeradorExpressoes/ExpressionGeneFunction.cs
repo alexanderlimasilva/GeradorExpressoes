@@ -18,50 +18,60 @@ namespace GeradorExpressoes
         {
             /// <summary>
             /// Addition operator.
+            /// Arguments 2
             /// </summary>
             Add = 0,
             /// <summary>
             /// Subtraction operator.
+            /// Arguments 2
             /// </summary>
             Subtract = 1,
             /// <summary>
             /// Multiplication operator.
+            /// Arguments 2
             /// </summary>
             Multiply = 2,
             /// <summary>
             /// Division operator.
+            /// Arguments 2
             /// </summary>
             Divide = 3,
             /// <summary>
             /// Pow/^ function.
+            /// Arguments 2
             /// </summary>
             Pow = 4,
             /// <summary>
             /// Square function.
+            /// Arguments 1
             /// </summary>
             Square = 5,
             /// <summary>
             /// Natural logarithm function.
+            /// Arguments 1
             /// </summary>
             Ln = 6,
             /// <summary>
             /// Exponent function.
+            /// Arguments 1
             /// </summary>
             Exp = 7,
             /// <summary>
             /// Square root function.
+            /// Arguments 1
             /// </summary>
-            Sqrt = 8,
+            Sqrt = 8
             /// <summary>
             /// Random numbers function.
+            /// Arguments 0
             /// </summary>
-            Erc = 9
+            ///Erc = 9
         }
 
         /// <summary>
         /// Number of different functions supported by the class.
         /// </summary>
-        protected const int FunctionsCount = 10;
+        protected const int FunctionsCount = 9; //10
 
         // gene type
         private GPGeneType	type;
@@ -195,15 +205,26 @@ namespace GeradorExpressoes
                     case Functions.Sqrt:		// square root
                         return "sqrt";
 
-                    case Functions.Erc:		    // constant random numbers
-                        float randomNumber = generator.Next();
-                        return randomNumber.ToString();
+                    //case Functions.Erc:		    // constant random numbers
+                    //    float randomNumber = generator.Next();
+                    //    return randomNumber.ToString();
+                    //    //return string.Format("C{0}", randomNumber);
                 }
+            }
+
+            // Alexander - Mudado gerador de constantes para ser um argumento ou terminal para evitar erro 
+            if (rand.Next(4) >= 2)
+            {    
+               // ERC - constant random numbers
+               float randomNumber = generator.Next();
+               return randomNumber.ToString();
+                //return string.Format("C{0}", randomNumber);
             }
 
             // get argument string representation
             //return string.Format( "${0}", val );
-            return string.Format("x", val);
+            return string.Format("X");
+ 
         }
 
         /// <summary>
@@ -252,8 +273,7 @@ namespace GeradorExpressoes
             // gene value
             val = rand.Next( ( type == GPGeneType.Function ) ? FunctionsCount : variablesCount );
             // arguments count
-            argumentsCount = ( type == GPGeneType.Argument ) ? 0 :
-                ( val <= (int) Functions.Divide ) ? 2 : 1;
+            argumentsCount = (type == GPGeneType.Argument) ? 0 : (val <= (int) Functions.Pow) ? 2 : 1;
         }
 
         /// <summary>

@@ -82,17 +82,19 @@ namespace GeradorExpressoes
                     // calculate best function
                     for (int j = 0; j < data.GetLength(0); j++)
                     {
-                        input[0] = data[j, 1];
-                        solution[j, 0] = PolishGerExpression.Evaluate(bestFunction, input);
+                        input[j] = data[j, 1];
+                        solution[j, 0] = PolishGerExpression.Evaluate(bestFunction, input, j);
                     }
 
                     // calculate error
                     double error = 0.0;
                     for (int j = 0, k = data.GetLength(0); j < k; j++)
                     {
-                        input[0] = data[j, 1];
-                        error += (Math.Abs(PolishGerExpression.Evaluate(bestFunction, input) - data[j, 0]) / (data[j, 0])) / data.GetLength(0);
+                        input[j] = data[j, 1];
+                        error += (Math.Abs(PolishGerExpression.Evaluate(bestFunction, input, j) - data[j, 0]) / (data[j, 0]));
                     }
+
+                    error = error / data.GetLength(0);
 
                 }
                 catch
@@ -112,12 +114,15 @@ namespace GeradorExpressoes
             //System.Console.WriteLine(population.BestChromosome.ToString());
             string expressao = population.BestChromosome.ToString().Trim();
             string expressaosubst = PolishGerExpression.SubstituteVariables(expressao, input);
+            string expressaosimpl = PolishGerExpression.SimplifyExpression(expressaosubst);
 
             string resultado = "";
-            resultado = expressao + "\r\n";
-            resultado = resultado + RPN2Infix.PostfixToInfix(expressao) + "\r\n";
-            resultado = resultado + expressaosubst + "\r\n";
-            resultado = resultado + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
+            resultado = "Expressão NPR gerada: " + expressao + "\r\n";
+            resultado = resultado + "Expressão formatada: " + (RPN2Infix.PostfixToInfix(expressao)) + "\r\n";
+            resultado = resultado + "Expressão NPR com substitução: " + expressaosubst + "\r\n";
+            resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
+            resultado = resultado + "Expressão NPR com substitução e simplificada: " + expressaosimpl + "\r\n";
+            resultado = resultado + "Expressão com substitução e simplificada formatada: " + RPN2Infix.PostfixToInfix(expressaosimpl) + "\r\n";
 
             //saida.escreveArquivo(population.BestChromosome.ToString().Trim(), dataset);
             //System.Console.WriteLine(RPN2Infix.Parse(population.BestChromosome.ToString().Replace("$","")));

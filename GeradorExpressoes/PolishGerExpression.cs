@@ -48,6 +48,7 @@ namespace AForge
     /// 
     public static class PolishGerExpression
     {
+        
         /// <summary>
         /// Evaluates specified expression.
         /// </summary>
@@ -60,7 +61,7 @@ namespace AForge
         /// <exception cref="ArgumentException">Unsupported function is used in the expression.</exception>
         /// <exception cref="ArgumentException">Incorrect postfix polish expression.</exception>
         ///
-        public static double Evaluate( string expression, double[] variables )
+        public static double Evaluate( string expression, double[] variables, int indice)
         {
             // split expression to separate tokens, which represent functions ans variables
             string[] tokens = expression.Trim( ).Split( ' ' );
@@ -91,13 +92,17 @@ namespace AForge
                     //arguments.Push(variables[int.Parse(token.Substring(1))]);
                 
                 }
-                else if (token[0] == 'x')
+                else if (token[0] == 'X')
                 {
                     // the token is variable
-                    int index = 0;
+                    int index = indice;
                     arguments.Push(variables[index]);
                 }
-
+                //else if (token[0] == 'C')
+                //{
+                //    // the token is a numeric constant in C format
+                //    arguments.Push(double.Parse(token.Substring(1)));
+                //}
                 else
                 {
                     // each function has at least one argument, so let's get the top one
@@ -210,6 +215,166 @@ namespace AForge
             ret.Remove( ret.Length - 1, 1 );
 
             return ret.ToString( );
+        }
+
+        /// <summary>
+        /// Simplifies the specified expression as much as possible without performing variable substitution.
+        /// </summary>
+        /// <remarks><code>
+        /// string expression = PolishExpression.SimplifyExpression( "$0 3 5 + *" );
+        /// // expression is now "$0 8 *".
+        /// </code>
+        /// </remarks>
+        ///
+        /// <param name="expression">Expression written in postfix polish notation.</param>
+        /// 
+        /// <returns>Simplified expression.</returns>
+        /// 
+        /// <exception cref="ArgumentException">Unsupported function is used in the expression.</exception>
+        /// <exception cref="ArgumentException">Incorrect postfix polish expression.</exception>
+        ///
+        public static string SimplifyExpression(string expression)
+        {
+            string[] tokens = SplitExpression(expression);
+
+            Stack simplified = new Stack();
+            foreach (string token in tokens)
+            {
+                switch (GetTokenType(token))
+                {
+
+                    case TokenType.UnaryFunction:
+                        if (simplified.Count < 1) throw new ArgumentException("Incorrect expression: Too few arguments for function " + token);
+                        if (simplified.Peek() is double)
+                            simplified.Push(ExecuteUnaryFunction(token, (double)simplified.Pop()));
+                        else
+                            simplified.Push(token);
+                        break;
+
+                    case TokenType.BinaryFunction:
+                        if (simplified.Count < 2) throw new ArgumentException("Incorrect expression: Too few arguments for function " + token);
+                        object arg2 = simplified.Pop();
+                        if (simplified.Peek() is double && arg2 is double)
+                            simplified.Push(ExecuteBinaryFunction(token, (double)simplified.Pop(), (double)arg2));
+                        else
+                        {
+                            simplified.Push(arg2);
+                            simplified.Push(token);
+                        }
+                        break;
+
+                    case TokenType.Number:
+                        simplified.Push(Double.Parse(token));
+                        break;
+
+                    case TokenType.Variable:
+                        simplified.Push(token);
+                        break;
+                }
+            }
+
+            StringBuilder ret = new StringBuilder();
+            foreach (object token in simplified)
+            {
+                ret.Insert(0, token).Insert(0, ' ');
+            }
+            ret.Remove(0, 1);
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// Split expression into tokens, which represent values, functions, and variables
+        /// </summary>
+        /// <param name="expression">The RPN expression to parse</param>
+        /// <returns>An array of tokens</returns>
+        private static string[] SplitExpression(string expression)
+        {
+            return expression.Trim().Split(' ');
+        }
+
+        /// <summary>
+        /// Enumera os tipos de token
+        /// </summary>
+        enum TokenType { Number, Variable, BinaryFunction, UnaryFunction };
+
+        /// <summary>
+        /// Verifica o tipo de token
+        /// </summary>
+        /// <param name="token">Token a ser verificado</param>
+        /// <returns>Retorna to tipo de token</returns>
+        private static TokenType GetTokenType(string token)
+        {
+            if (token[0] == '$') return TokenType.Variable;
+            if (token[0] == 'X') return TokenType.Variable;
+            switch (token)
+            {
+                case "+":
+                case "-":
+                case "*":
+                case "/":
+                case "^":
+                    return TokenType.BinaryFunction;
+                case "square":
+                case "ln":
+                case "exp":
+                case "sqrt":
+                    return TokenType.UnaryFunction;
+            }
+            double temp;
+            if (Double.TryParse(token, out temp)) { return TokenType.Number; }
+            throw new ArgumentException("Unsupported postfix expression: " + token);
+        }
+
+        private static double ExecuteUnaryFunction(string function, double arg)
+        {
+            // check for function
+            switch (function)
+            {
+                case "square":		// square
+                    return Math.Pow(arg, 2);
+
+                case "ln":			// natural logarithm
+                    return Math.Log(arg);
+
+                case "exp":			// exponent
+                    return Math.Exp(arg);
+
+                case "sqrt":		// square root
+                    return Math.Sqrt(arg);
+
+                default:
+                    // throw exception informing about undefined function
+                    throw new ArgumentException("Unsupported function: " + function);
+            }
+        }
+
+        private static double ExecuteBinaryFunction(string function, double arg1, double arg2)
+        {
+
+            // check for function
+            switch (function)
+            {
+
+                case "+":			// addition
+                    return arg1 + arg2;
+
+                case "-":			// subtraction
+                    return arg1 - arg2;
+
+                case "*":			// multiplication
+                    return arg1 * arg2;
+
+                case "/":			// division
+                    return arg1 / arg2;
+
+                case "^":			// pow
+                    return Math.Pow(arg1, arg2);
+
+                default:
+                    // throw exception informing about undefined function
+                    throw new ArgumentException("Unsupported function: " + function);
+            }
+
         }
 
     }

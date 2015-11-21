@@ -66,16 +66,16 @@ namespace GeradorExpressoes
             this.data = data;
             // copy constants
             //variables = new double[constants.Length + 1];
-            //variables = new double[data.GetLength(0)];
-            variables = new double[1];
+            variables = new double[data.GetLength(0)];
+            //variables = new double[1];
 
             //Array.Copy( constants, 0, variables, 1, constants.Length );
-            //Array.Copy(data[0,0], 0, variables, 0, data.GetLength(0));
+            //Array.Copy(data, 0, variables, 0, data.GetLength(0));
 
-            //for (int j = 0; j < data.GetLength(0); j++)
-            //{
-            //    variables[j] = data[j, 0];
-            //}
+            for (int j = 0; j < data.GetLength(0); j++)
+            {
+                variables[j] = data[j, 1];
+            }
         }
 
         /// <summary>
@@ -94,34 +94,46 @@ namespace GeradorExpressoes
             // get function in polish notation
             string function = chromosome.ToString( );
 
-            // go through all the data
-            double error = 0.0;
-            for ( int i = 0, n = data.GetLength( 0 ); i < n; i++ )
+            //verifica se na expressao gerada possui pelo menos um dado de entrada (x), senao retorna 0
+            if (function.IndexOf("X", 0) >= 0)
             {
-                // put next X value to variables list
-                variables[0] = data[i, 1];
-                // avoid evaluation errors
-                try
+
+                // go through all the data
+                double error = 0.0;
+                for (int i = 0, n = data.GetLength(0); i < n; i++)
                 {
-                    // evalue the function
-                    double y = PolishGerExpression.Evaluate( function, variables );
-                    // check for correct numeric value
-                    if ( double.IsNaN( y ) )
+                    // put next X value to variables list
+                    //variables[0] = data[i, 1];
+
+                    // avoid evaluation errors
+                    try
+                    {
+                        // evalue the function
+                        double y = PolishGerExpression.Evaluate(function, variables, i);
+                        // check for correct numeric value
+                        if (double.IsNaN(y))
+                            return 0;
+                        // get the difference between evaluated Y and real Y
+                        // and sum relative error
+                        error += Math.Abs(y - data[i, 0]) / (data[i, 0]);
+                        //System.Console.WriteLine(i + " function: " + function + " erro: " + error);
+                    }
+                    catch
+                    {
                         return 0;
-                    // get the difference between evaluated Y and real Y
-                    // and sum relative error
-                    error += Math.Abs( y - data[i, 0]) / (data[i, 0]) ;
-                    //System.Console.WriteLine(Math.Abs(y - data[i, 0]) / (data[i, 0]));
+                    }
                 }
-                catch
-                {
-                    return 0;
-                }
+
+                // return function average value 
+                System.Console.WriteLine(" Media erro: " + error / data.GetLength(0));
+                return (error / data.GetLength(0));
+
+            }
+            else
+            {
+                return 0;
             }
 
-            // return function average value 
-            System.Console.WriteLine(error / data.GetLength(0));
-            return (error / data.GetLength ( 0 ) );
         }
 
         /// <summary>
