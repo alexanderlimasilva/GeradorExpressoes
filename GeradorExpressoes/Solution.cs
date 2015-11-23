@@ -129,8 +129,10 @@ namespace GeradorExpressoes
             //System.Console.WriteLine(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "").Trim()));
             //saida.escreveArquivo(RPN2Infix.PostfixToInfix(population.BestChromosome.ToString().Replace("$", "")), "Expressao");
 
+            string nomearq = "resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
+           
             WriteData saida = new WriteData();
-            saida.escreveArquivo(resultado, dataset);
+            saida.escreveArquivo(resultado, nomearq);
 
             System.Console.WriteLine("Fim do Programa");
         }

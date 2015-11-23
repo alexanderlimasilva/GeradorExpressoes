@@ -12,7 +12,7 @@ namespace GeradorExpressoes
         public void escreveArquivo(String texto, string arquivo)
         {
 
-            String nomeArq = @"D:\Projetos C\Instancias\resultado_" + arquivo + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+            String nomeArq = @"D:\Projetos C\Resultados\" + arquivo + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
 
             //Declaração do método StreamWriter passando o caminho e nome do arquivo que deve ser salvo
             StreamWriter writer = new StreamWriter(nomeArq);
