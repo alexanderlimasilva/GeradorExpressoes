@@ -20,7 +20,7 @@ namespace GeradorExpressoes
             int iterations = 1000;
             int selectionMethod = 0;
             int functionsSet = 1;
-            int geneticMethod = 0;
+            int geneticMethod = 1;
 
             Thread	workerThread = null;
             bool needToStop = false;
@@ -49,6 +49,8 @@ namespace GeradorExpressoes
             workerThread.Start();
 
             System.Console.WriteLine("Iniciando a busca ...");
+
+            solution.SearchSolution();
         }
 
     }

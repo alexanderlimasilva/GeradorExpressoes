@@ -231,7 +231,7 @@ namespace GeradorExpressoes
             }
 
             // The loop above leaves the final expression on the top of the stack.
-            System.Console.WriteLine(stack.Peek().expr);
+            //System.Console.WriteLine(stack.Peek().expr);
             return stack.Peek().expr;
         }
 

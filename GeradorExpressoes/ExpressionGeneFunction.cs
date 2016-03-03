@@ -5,6 +5,7 @@ using System.Text;
 
 using AForge;
 using AForge.Genetic;
+using AForge.Controls;
 
 namespace GeradorExpressoes
 {
@@ -78,7 +79,7 @@ namespace GeradorExpressoes
         // total amount of variables in the task which is supposed to be solved
         private int			variablesCount;
         //
-        private int			val;
+        private double		val;
         // arguments count
         private int			argumentsCount = 0;
 
@@ -123,7 +124,7 @@ namespace GeradorExpressoes
         /// 
         public int MaxArgumentsCount
         {
-            get { return 2; }
+            get { return 5; }
         }
 
         /// <summary>
@@ -210,16 +211,20 @@ namespace GeradorExpressoes
                     //    return randomNumber.ToString();
                     //    //return string.Format("C{0}", randomNumber);
                 }
+            } 
+            else if ( type == GPGeneType.Constant )
+            {
+                return string.Format("{0}", val);
             }
 
             // Alexander - Mudado gerador de constantes para ser um argumento ou terminal para evitar erro 
-            if (rand.Next(4) >= 2)
-            {    
-               // ERC - constant random numbers
-               float randomNumber = generator.Next();
-               return randomNumber.ToString();
-                //return string.Format("C{0}", randomNumber);
-            }
+            //if (rand.Next(4) >= 2)
+            //{
+            //    // ERC - constant random numbers
+            //    float randomNumber = generator.Next();
+            //    return randomNumber.ToString();
+            //    //return string.Format("C{0}", randomNumber);
+            //}
 
             // get argument string representation
             //return string.Format( "${0}", val );
@@ -254,7 +259,7 @@ namespace GeradorExpressoes
         public void Generate( )
         {
             // give more chance to function
-            Generate( ( rand.Next( 4 ) == 3 ) ? GPGeneType.Argument : GPGeneType.Function );
+            Generate((rand.Next(4) == 3) ? ((rand.Next(4) >= 2) ? GPGeneType.Constant : GPGeneType.Argument) : GPGeneType.Function);
         }
 
         /// <summary>
@@ -271,11 +276,19 @@ namespace GeradorExpressoes
             // gene type
             this.type = type;
             // gene value
-            val = rand.Next( ( type == GPGeneType.Function ) ? FunctionsCount : variablesCount );
+            if (type == GPGeneType.Constant)
+            {
+                // se for constante ERC gerar valor aleatorio como argumento
+                val = generator.Next();
+            }
+            else 
+            {
+              val = rand.Next( ( type == GPGeneType.Function ) ? FunctionsCount : variablesCount );
+            }
             // arguments count
-            argumentsCount = (type == GPGeneType.Argument) ? 0 : (val <= (int) Functions.Pow) ? 2 : 1;
+            argumentsCount = ((type == GPGeneType.Argument) || (type == GPGeneType.Constant)) ? 0 : (val <= (int)Functions.Pow) ? 2 : 1;
         }
-
+     
         /// <summary>
         /// Creates new gene with random type and value.
         /// </summary>

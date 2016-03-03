@@ -1,7 +1,10 @@
-ï»¿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+// AForge Genetic Library
+// AForge.NET framework
+// http://www.aforgenet.com/framework/
+//
+// Copyright © Andrew Kirillov, 2006-2009
+// andrew.kirillov@aforgenet.com
+//
 
 namespace GeradorExpressoes
 {
@@ -10,15 +13,15 @@ namespace GeradorExpressoes
     using AForge.Genetic;
 
     /// <summary>
-    /// Fitness function for symbolic regression problem
+    /// Fitness function for symbolic regression (function approximation) problem
     /// </summary>
     /// 
     /// <remarks><para>The fitness function calculates fitness value of
     /// <see cref="GPTreeChromosome">GP</see> and <see cref="GEPChromosome">GEP</see>
     /// chromosomes with the aim of solving symbolic regression problem. The fitness function's
     /// value is computed as:
-    /// <code> ((estimated value - atual value) / atual value ) / number of elements</code>
-    /// where <b>error</b> equals to the avarage of magnitude of relative error between function values (computed using
+    /// <code>100.0 / ( error + 1 )</code>
+    /// where <b>error</b> equals to the sum of absolute differences between function values (computed using
     /// the function encoded by chromosome) and input values (function to be approximated).</para>
     /// 
     /// <para>Sample usage:</para>
@@ -26,7 +29,8 @@ namespace GeradorExpressoes
     ///	// constants
     ///	double[] constants = new double[5] { 1, 2, 3, 5, 7 };
     ///	// function to be approximated
-    ///	double[,] data = dada from dataset;
+    ///	double[,] data = new double[5, 2] {
+    ///		{1, 1}, {2, 3}, {3, 6}, {4, 10}, {5, 15} };
     ///	// create population
     ///	Population population = new Population( 100,
     ///		new GPTreeChromosome( new SimpleGeneFunction( 1 + constants.Length ) ),
@@ -37,8 +41,7 @@ namespace GeradorExpressoes
     /// </code>
     /// </remarks>
     /// 
-
-    public class MMREFitness : IFitnessFunction
+    public class SymbolicRegressionFitness : IFitnessFunction
     {
         // regression data
         private double[,]	data;
@@ -61,16 +64,13 @@ namespace GeradorExpressoes
         /// genetic expression equals to the amount of constants plus one - the <b>x</b> variable.</para>
         /// </remarks>
         /// 
-        public MMREFitness(double[,] data)   //, double[] constants
+        public SymbolicRegressionFitness( double[,] data, double[] constants )
         {
             this.data = data;
             // copy constants
             //variables = new double[constants.Length + 1];
             variables = new double[data.GetLength(0)];
-            //variables = new double[1];
-
             //Array.Copy( constants, 0, variables, 1, constants.Length );
-            //Array.Copy(data, 0, variables, 0, data.GetLength(0));
 
             for (int j = 0; j < data.GetLength(0); j++)
             {
@@ -89,33 +89,32 @@ namespace GeradorExpressoes
         /// <remarks>The method calculates fitness value of the specified
         /// chromosome.</remarks>
         ///
-        public double Evaluate(IChromosome chromosome)  //IChromosome
+        public double Evaluate( IChromosome chromosome )
         {
             double PROBABLY_ZERO = 1.11E-15;
             double BIG_NUMBER = 1.0e15;
-
+            
             // get function in polish notation
             string function = chromosome.ToString( );
 
-            //verifica se na expressao gerada possui pelo menos um dado de entrada (x), senao retorna 0
+            //verifica se na expressao gerada possui pelo menos um dado de entrada (x), senao retorna maior numero
             if (function.IndexOf("X", 0) >= 0)
             {
 
                 // go through all the data
                 double error = 0.0;
-                for (int i = 0, n = data.GetLength(0); i < n; i++)
+                for ( int i = 0, n = data.GetLength( 0 ); i < n; i++ )
                 {
                     // put next X value to variables list
-                    //variables[0] = data[i, 1];
-
+                    // variables[0] = data[i, 0];
                     // avoid evaluation errors
                     try
                     {
                         // evalue the function
                         double y = PolishGerExpression.Evaluate(function, variables, i);
-
+                        
                         // check for correct numeric value
-                        if (double.IsNaN(y))
+                        if ( double.IsNaN( y ) )
                             return BIG_NUMBER; //0;
 
                         if (!(y < BIG_NUMBER))       // *NOT* (input.x >= BIG_NUMBER)
@@ -124,8 +123,9 @@ namespace GeradorExpressoes
                         else if (y < PROBABLY_ZERO)  // slightly off
                             y = 0.0;
 
-                        error += Math.Abs(y - data[i, 0]) / (data[i, 0]);
-                        //System.Console.WriteLine(i + " function: " + function + " erro: " + error);
+                        // get the difference between evaluated Y and real Y
+                        // and sum error
+                        error += Math.Abs( y - data[i, 0] );
                     }
                     catch
                     {
@@ -133,9 +133,9 @@ namespace GeradorExpressoes
                     }
                 }
 
-                // return function average value 
-                // System.Console.WriteLine(" Media erro: " + error / data.GetLength(0));
-                return (error / data.GetLength(0));
+                // return optimization function value
+                //return 100.0 / ( error + 1 );
+                return error;
 
             }
             else
@@ -164,5 +164,4 @@ namespace GeradorExpressoes
             return chromosome.ToString( );
         }
     }
-
 }

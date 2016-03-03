@@ -6,7 +6,7 @@
 // andrew.kirillov@aforgenet.com
 //
 
-namespace AForge
+namespace GeradorExpressoes
 {
     using System;
     using System.Collections;

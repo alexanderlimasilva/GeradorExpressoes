@@ -56,15 +56,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionGeneFunction.cs" />
+    <Compile Include="GEPChromosome.cs" />
+    <Compile Include="GPTreeChromosome.cs" />
+    <Compile Include="GPTreeNode.cs" />
+    <Compile Include="IGPGene.cs" />
     <Compile Include="Intermediate.cs" />
     <Compile Include="IRandomNumberGenerator.cs" />
     <Compile Include="LoadData.cs" />
     <Compile Include="MMREFitness.cs" />
+    <Compile Include="Population.cs" />
     <Compile Include="RPN2Infix.cs" />
     <Compile Include="PolishGerExpression.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solution.cs" />
+    <Compile Include="SymbolicRegressionFitness.cs" />
     <Compile Include="UniformGenerator.cs" />
     <Compile Include="UniformOneGenerator.cs" />
     <Compile Include="WriteData.cs" />
