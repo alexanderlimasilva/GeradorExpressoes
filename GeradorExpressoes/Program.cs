@@ -17,10 +17,10 @@ namespace GeradorExpressoes
 
             // parametros para o inicio da execução
             int populationSize = 100;
-            int iterations = 1000;
+            int iterations = 300000;
             int selectionMethod = 0;
             int functionsSet = 1;
-            int geneticMethod = 1;
+            int geneticMethod = 0;
 
             Thread	workerThread = null;
             bool needToStop = false;
