@@ -434,6 +434,7 @@ namespace GeradorExpressoes
         /// 
         public void RunEpoch( )
         {
+            SortbyFitness();
             Crossover( );
             Mutate( );
             Selection( );
@@ -467,6 +468,33 @@ namespace GeradorExpressoes
                 tempPopulation.RemoveAt( i );
 
                 size--;
+            }
+        }
+
+        /// <summary>
+        /// Sort the current population in descending order by his fitness value.
+        /// </summary>
+        /// 
+        /// <remarks><para>Population may be ordered in descending order by his fitness value.</para></remarks>
+        /// 
+        public void SortbyFitness()
+        {
+            // current population size
+            int size = population.Count;
+            // Sorting
+            for (int i= size - 1; i >= 1; i--)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    // generate next random number and check if we need to do crossover
+                    if (population[j].Fitness > population[j+1].Fitness)
+                    {
+                        // // faz a ordenacao
+                         IChromosome aux = population[j];
+                         population[j] = population[j + 1];
+                         population[j + 1] = aux;
+                    }
+                }
             }
         }
 
@@ -653,7 +681,12 @@ namespace GeradorExpressoes
                 fitnessAvg = fitnessSum / size;
         }
 
-        // Print the population so far
+        /// <summary>
+        /// Print the population so far
+        /// </summary>
+        /// 
+        /// <remarks><para>Print the population and fitness value</para></remarks>
+        /// 
         public void toString( ) {
 
             for (int i = 0; i < size; i++)

@@ -80,13 +80,14 @@ namespace GeradorExpressoes
 
                 try
                 {
-                    System.Console.WriteLine(i.ToString());
+                    System.Console.WriteLine("Geração : " + i.ToString());
 
                     // get best solution
                     string bestFunction = population.BestChromosome.ToString().Trim();
                     System.Console.WriteLine("Função: " + RPN2Infix.PostfixToInfix(bestFunction));
 
                     double sum = 0.0;
+                    double error = 0.0;
                     double result = 0.0;
                     double resultgerado = 0.0;
                     
@@ -97,14 +98,14 @@ namespace GeradorExpressoes
                         double PROBABLY_ZERO = 1.11E-15;
                         double BIG_NUMBER = 1.0e15;
                         
-                        System.Console.WriteLine(input[j]);
+                        System.Console.WriteLine("Valor de entrada: " + input[j]);
 
                         resultgerado = PolishGerExpression.Evaluate(bestFunction, input, j);
 
-                        // fitness
-                        result = Math.Abs(resultgerado - data[j, 0]);
+                        // fitness (atual - estimado) / atual
+                        result = Math.Abs((data[j, 0] - resultgerado) / data[j, 0]);
 
-                        if (!(result < BIG_NUMBER))   // *NOT* (input.x >= BIG_NUMBER)
+                        if (!(result < BIG_NUMBER))       // *NOT* (input.x >= BIG_NUMBER)
                             result = BIG_NUMBER;
 
                         else if (result < PROBABLY_ZERO)  // slightly off
@@ -115,16 +116,16 @@ namespace GeradorExpressoes
                         sum += result;   
   
                         //impressao dos dados gerados e esperados
-                        System.Console.WriteLine("Gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " diferença: " + result);
+                        System.Console.WriteLine("Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " diferença: " + result);
                     }
 
                     // calculate error
-                    double error = 0.0;
                     error = sum / data.GetLength(0);
 
                     System.Console.WriteLine("Erro acumulado: " + sum);
                     System.Console.WriteLine("Erro Médio: " + error);
                     System.Console.WriteLine("Hits: " + hits);
+                    System.Console.WriteLine("");
 
                 }
                 catch (Exception e)

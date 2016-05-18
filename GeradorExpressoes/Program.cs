@@ -18,11 +18,11 @@ namespace GeradorExpressoes
             // parametros para o inicio da execução
             int populationSize = 100;
             int iterations = 300000;
-            int selectionMethod = 0;
+            int selectionMethod = 2;
             int functionsSet = 1;
             int geneticMethod = 0;
 
-            Thread	workerThread = null;
+            //Thread	workerThread = null;
             bool needToStop = false;
 
             String dataset = "abran";
@@ -43,10 +43,10 @@ namespace GeradorExpressoes
             Solution solution = new Solution(data, populationSize, iterations, selectionMethod, functionsSet, geneticMethod, needToStop, dataset);
 
             // Criação do objeto do thread. Não inicia o thread.
-            workerThread = new Thread(new ThreadStart(solution.SearchSolution));
+            //workerThread = new Thread(new ThreadStart(solution.SearchSolution));
 
             // Inicia o thread.
-            workerThread.Start();
+            //workerThread.Start();
 
             System.Console.WriteLine("Iniciando a busca ...");
 

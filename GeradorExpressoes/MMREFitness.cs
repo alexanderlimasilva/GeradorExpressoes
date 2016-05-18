@@ -93,16 +93,16 @@ namespace GeradorExpressoes
         {
             double PROBABLY_ZERO = 1.11E-15;
             double BIG_NUMBER = 1.0e15;
-
+            
             // get function in polish notation
             string function = chromosome.ToString( );
 
             //verifica se na expressao gerada possui pelo menos um dado de entrada (x), senao retorna 0
             if (function.IndexOf("X", 0) >= 0)
             {
-
                 // go through all the data
                 double error = 0.0;
+                double result = 0.0;
                 for (int i = 0, n = data.GetLength(0); i < n; i++)
                 {
                     // put next X value to variables list
@@ -116,15 +116,18 @@ namespace GeradorExpressoes
 
                         // check for correct numeric value
                         if (double.IsNaN(y))
-                            return BIG_NUMBER; //0;
+                           return BIG_NUMBER; //0; y = BIG_NUMBER; //0;
 
-                        if (!(y < BIG_NUMBER))       // *NOT* (input.x >= BIG_NUMBER)
-                            y = BIG_NUMBER;
+                        //(atual - estimado) / atual
+                        result = Math.Abs(data[i, 0] - y) / (data[i, 0]);
 
-                        else if (y < PROBABLY_ZERO)  // slightly off
-                            y = 0.0;
+                        if (!(result < BIG_NUMBER))  // *NOT* (input.x >= BIG_NUMBER)
+                            result = BIG_NUMBER;
 
-                        error += Math.Abs(y - data[i, 0]) / (data[i, 0]);
+                        else if (result < PROBABLY_ZERO)  // slightly off
+                            result = 0.0;
+
+                        error += result;
                         //System.Console.WriteLine(i + " function: " + function + " erro: " + error);
                     }
                     catch
