@@ -644,7 +644,31 @@ namespace GeradorExpressoes
         }
 
         // Find best chromosome in the population so far
-        public void FindBestChromosome( )
+        //public void FindBestChromosome()
+        //{
+        //    bestChromosome = population[0];
+        //    fitnessMax = bestChromosome.Fitness;
+        //    fitnessSum = fitnessMax;
+
+        //    for (int i = 1; i < size; i++)
+        //    {
+        //        double fitness = population[i].Fitness;
+
+        //        // accumulate summary value
+        //        fitnessSum += fitness;
+
+        //        // check for max
+        //        if (fitness < fitnessMax)
+        //        {
+        //            fitnessMax = fitness;
+        //            bestChromosome = population[i];
+        //        }
+        //    }
+        //    fitnessAvg = fitnessSum / size;
+        //}
+
+        // Find best chromosome in the population so far
+        public void FindBestChromosome()
         {
             string[] tokens;
 
@@ -687,14 +711,19 @@ namespace GeradorExpressoes
         /// 
         /// <remarks><para>Print the population and fitness value</para></remarks>
         /// 
-        public void toString( ) {
+        public String toString( ) {
+
+            IChromosome	c1 = null;
+            string populacao = "";
 
             for (int i = 0; i < size; i++)
             {
-                bestChromosome = population[i];
-                System.Console.WriteLine("Chromosome " + (i + 1) + ": " + RPN2Infix.PostfixToInfix(bestChromosome.ToString().Trim()) + " Fitness: " + population[i].Fitness.ToString());
+                c1 = population[i];
+                //System.Console.WriteLine("Chromosome " + (i + 1) + ": " + RPN2Infix.PostfixToInfix(c1.ToString().Trim()) + " Fitness: " + population[i].Fitness.ToString());
+                populacao += "Chromosome " + (i + 1) + ": " + "\t" + RPN2Infix.PostfixToInfix(c1.ToString().Trim()) + "\r\n" + "Fitness: " + "\t" + population[i].Fitness.ToString() + "\r\n";
             }
-            bestChromosome = null;
+
+            return populacao;
         }
         
     }

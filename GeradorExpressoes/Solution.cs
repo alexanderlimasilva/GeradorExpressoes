@@ -19,7 +19,9 @@ namespace GeradorExpressoes
         int functionsSet;
         int geneticMethod;
         bool needToStop;
+        bool useFunction = false;
         string dataset;
+        string nomearq;
 
         public Solution(double[,] ndata, int npopulationSize, int niterations, int nselectionMethod, int nfunctionsSet, int ngeneticMethod, Boolean bneedToStop, string instancia)
         {
@@ -33,8 +35,16 @@ namespace GeradorExpressoes
             dataset = instancia;
         }
 
+        // função a verificar
+        public double func(double x)
+        { 
+            return 2.649261 * x; 
+        }
+
         public void SearchSolution()
         {
+            WriteData saida = new WriteData();
+            
             // create fitness function
             MMREFitness fitness = new MMREFitness(data);
             //SymbolicRegressionFitness fitness = new SymbolicRegressionFitness(data, new double[] { 1, 2, 3, 5, 7, 9});
@@ -58,31 +68,48 @@ namespace GeradorExpressoes
             // solution array
             double[,] solution = new double[data.GetLength(0), 2];
             double[] input = new double[data.GetLength(0)];
+            double[] output = new double[data.GetLength(0)];
             //double[] input = new double[1];
 
-            // Alexander - rever esta funcao
-            // calculate X values to be used with solution function
+            // Alexander - Define o valor de entrada X com base no dataset
             for (int j = 0; j < data.GetLength(0); j++)
             {
                 input[j] = data[j, 1];
             }
 
+            // Alexander - Define se saida sera baseada na função ou nos dados existentes no dataset
+            for (int j = 0; j < data.GetLength(0); j++)
+            {
+                if (useFunction)
+                   output[j] = func(input[j]);
+                else
+                   output[j] = data[j, 0];
+
+                System.Console.WriteLine(String.Format("{0:N}", input[j]) + ", " + String.Format("{0:N}", output[j]));
+            }
+
             // loop
             while (!needToStop)
             {
+                System.Console.WriteLine("Geração: " + i.ToString());
+
                 int hits = 0;
+
+                //Grava a população gerada e seu fitness em cada rodada
+                nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
+                saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
                 
                 // run one epoch of genetic algorithm
                 //population.RunEpoch();
                 //population.Regenerate();
                 //population.toString();
-                population.FindBestChromosome();
-
+                //population.FindBestChromosome();
+                
                 try
                 {
-                    System.Console.WriteLine("Geração : " + i.ToString());
-
                     // get best solution
+                    population.FindBestChromosome();
+
                     string bestFunction = population.BestChromosome.ToString().Trim();
                     System.Console.WriteLine("Função: " + RPN2Infix.PostfixToInfix(bestFunction));
 
@@ -103,7 +130,7 @@ namespace GeradorExpressoes
                         resultgerado = PolishGerExpression.Evaluate(bestFunction, input, j);
 
                         // fitness (atual - estimado) / atual
-                        result = Math.Abs((data[j, 0] - resultgerado) / data[j, 0]);
+                        result = Math.Abs((output[j] - resultgerado) / output[j]);
 
                         if (!(result < BIG_NUMBER))       // *NOT* (input.x >= BIG_NUMBER)
                             result = BIG_NUMBER;
@@ -116,7 +143,7 @@ namespace GeradorExpressoes
                         sum += result;   
   
                         //impressao dos dados gerados e esperados
-                        System.Console.WriteLine("Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " diferença: " + result);
+                        System.Console.WriteLine("Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result);
                     }
 
                     // calculate error
@@ -157,13 +184,14 @@ namespace GeradorExpressoes
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";
             resultado = resultado + "Expressão com substitução simplificada formatada: " + RPN2Infix.PostfixToInfix(expressaosimpl) + "\r\n";
 
-            string nomearq = "resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
+            nomearq = "Resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
            
-            WriteData saida = new WriteData();
+            //WriteData saida = new WriteData();
             saida.escreveArquivo(resultado, nomearq);
 
             System.Console.WriteLine("Fim do Programa");
         }
 
     }
+
 }
