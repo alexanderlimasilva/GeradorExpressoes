@@ -58,7 +58,7 @@ namespace GeradorExpressoes
                     (IChromosome)new GEPChromosome(gene, 15),
                 fitness,
                 (selectionMethod == 0) ? (ISelectionMethod)new EliteSelection() :
-                (selectionMethod == 1) ? (ISelectionMethod)new RankSelection() :
+                (selectionMethod == 1) ? (ISelectionMethod)new RankSelection() : 
                                          (ISelectionMethod)new RouletteWheelSelection()
                 );
 

@@ -343,8 +343,8 @@ namespace GeradorExpressoes
                 if ( rand.NextDouble( ) <= crossoverRate )
                 {
                     // clone both ancestors
-                    IChromosome c1 = population[i - 1].Clone( );
-                    IChromosome c2 = population[i].Clone( );
+                    IChromosome c1 = tournamentSelection(this); //population[i - 1].Clone();
+                    IChromosome c2 = tournamentSelection(this); //population[i].Clone();
 
                     // do crossover
                     c1.Crossover( c2 );
@@ -434,13 +434,93 @@ namespace GeradorExpressoes
         /// 
         public void RunEpoch( )
         {
-            SortbyFitness();
+            //SortbyFitness();
             Crossover( );
             Mutate( );
             Selection( );
 
             if ( autoShuffling )
                 Shuffle( );
+
+            /*
+            //Evolui a populacao
+            Population tempPopulation = evolvePopulation(this);
+            
+            // clear current population and refill it with new population
+            population.Clear();
+
+            for (int i = 0; i < size; i++)
+            {
+                population.Add(tempPopulation[i]);
+            }
+            */
+        }
+
+        /* com erro
+        /// <summary>
+        /// Novo metodo para evoluir a populacao
+        /// </summary>
+        /// <param name="pop"></param>
+        /// <returns></returns>
+        private Population evolvePopulation(Population pop)
+        {
+            Population newPopulation = new Population(pop.Size, pop.bestChromosome, pop.FitnessFunction,pop.SelectionMethod);
+
+            for (int i = 0; i< pop.size; i++ )
+            {
+                //seleciona os melhores cromossomos de acordo com o torneio
+                IChromosome c1 = tournamentSelection(pop);
+                IChromosome c2 = tournamentSelection(pop);
+
+                //realiza o crossover entre osmelhores
+                //IChromosome c = NewCrossover(c1,c2);
+
+                //calcula o fitness e adiciona o cromossomo
+                //corrigir
+                //newPopulation.AddChromosome( c );
+            }
+
+            //realiza a mutaçao
+            Mutate();
+
+            return newPopulation;
+        }
+        */
+
+        /// <summary>
+        /// create instance of random generator
+        /// </summary>
+        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 1));
+
+        /// <summary>
+        /// Nova Implementacao do tournament selection para a populacao
+        /// </summary>
+        /// <param name="pop"></param>
+        /// <returns></returns>
+        private IChromosome tournamentSelection(Population pop)
+        {
+            int tournamentSize = 5;
+            
+            Population tournament = new Population(tournamentSize, pop.bestChromosome, pop.fitnessFunction, pop.selectionMethod);
+            //List<IChromosome> tempPopulation = population.GetRange( 0, tournamentSize );
+
+            for (int i = 0; i < tournamentSize; i++ )
+            {
+                 // amount of random chromosomes in the new population
+                int randomID = (int) Math.Round(generator.Next() * pop.size);
+
+                //tempPopulation.RemoveAt( i );
+                IChromosome c = pop[randomID].Clone( );
+
+                List<IChromosome> tempPopulation = population.GetRange( 0, size );
+
+                //corrigir
+                //tournament.AddChromosome(pop[randomID].Clone( ));
+            }
+
+            tournament.FindBestChromosome();
+
+            return tournament.BestChromosome;
         }
 
         /// <summary>

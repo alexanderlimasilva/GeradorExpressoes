@@ -35,6 +35,3 @@ D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.xml
 D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.exe
 D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.pdb
 D:\Projetos C\GeradorExpressoes\GeradorExpressoes\obj\x86\Debug\GeradorExpressoes.csprojResolveAssemblyReference.cache
-D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Controls.pdb
-D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Genetic.pdb
-D:\Projetos C\GeradorExpressoes\GeradorExpressoes\bin\Debug\AForge.Math.pdb
