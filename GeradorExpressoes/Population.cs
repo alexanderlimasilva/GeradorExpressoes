@@ -343,8 +343,8 @@ namespace GeradorExpressoes
                 if ( rand.NextDouble( ) <= crossoverRate )
                 {
                     // clone both ancestors
-                    IChromosome c1 = tournamentSelection(this); //population[i - 1].Clone();
-                    IChromosome c2 = tournamentSelection(this); //population[i].Clone();
+                    IChromosome c1 = tournamentSelection(population, size); //population[i - 1].Clone();
+                    IChromosome c2 = tournamentSelection(population, size); //population[i].Clone();
 
                     // do crossover
                     c1.Crossover( c2 );
@@ -497,30 +497,74 @@ namespace GeradorExpressoes
         /// </summary>
         /// <param name="pop"></param>
         /// <returns></returns>
-        private IChromosome tournamentSelection(Population pop)
-        {
-            int tournamentSize = 5;
+        //private IChromosome tournamentSelection(Population pop)
+        //{
+        //    int tournamentSize = 5;
             
-            Population tournament = new Population(tournamentSize, pop.bestChromosome, pop.fitnessFunction, pop.selectionMethod);
-            //List<IChromosome> tempPopulation = population.GetRange( 0, tournamentSize );
+        //    Population tournament = new Population(tournamentSize, pop.bestChromosome, pop.fitnessFunction, pop.selectionMethod);
+        //    //List<IChromosome> tempPopulation = population.GetRange( 0, tournamentSize );
 
-            for (int i = 0; i < tournamentSize; i++ )
+        //    for (int i = 0; i < tournamentSize; i++ )
+        //    {
+        //         // amount of random chromosomes in the new population
+        //        int randomID = (int) Math.Round(generator.Next() * pop.size);
+
+        //        //tempPopulation.RemoveAt( i );
+        //        IChromosome c = pop[randomID].Clone( );
+
+        //        //List<IChromosome> tempPopulation = population.GetRange( 0, size );
+
+        //        //corrigir
+        //        tournament.AddChromosome(pop[randomID].Clone( ));
+        //    }
+
+        //    tournament.FindBestChromosome();
+
+        //    return tournament.BestChromosome;
+        //}
+
+        public IChromosome tournamentSelection(List<IChromosome> chromosomes, int size)
+        {
+            // size of current population
+            int currentSize = chromosomes.Count;
+
+            // Iniciando o cromossomo
+            IChromosome cromo = BestChromosome;
+
+            // calculate summary fitness of current population
+            double fitnessSum = 0;
+            foreach (IChromosome c in chromosomes)
             {
-                 // amount of random chromosomes in the new population
-                int randomID = (int) Math.Round(generator.Next() * pop.size);
-
-                //tempPopulation.RemoveAt( i );
-                IChromosome c = pop[randomID].Clone( );
-
-                List<IChromosome> tempPopulation = population.GetRange( 0, size );
-
-                //corrigir
-                //tournament.AddChromosome(pop[randomID].Clone( ));
+                fitnessSum += c.Fitness;
             }
 
-            tournament.FindBestChromosome();
+            // create wheel ranges
+            double[] rangeMax = new double[currentSize];
+            double s = 0;
+            int k = 0;
 
-            return tournament.BestChromosome;
+            foreach (IChromosome c in chromosomes)
+            {
+                // cumulative normalized fitness
+                s += (c.Fitness / fitnessSum);
+                rangeMax[k++] = s;
+            }
+
+            // get wheel value
+            double wheelValue = rand.NextDouble();
+
+            // find the chromosome for the wheel value
+            for (int i = 0; i < currentSize; i++)
+            {
+                if (wheelValue <= rangeMax[i])
+                {
+                    // add the chromosome to the new population
+                    cromo = ((IChromosome)chromosomes[i]).Clone();
+                    break;
+                }
+            }
+
+            return cromo;
         }
 
         /// <summary>

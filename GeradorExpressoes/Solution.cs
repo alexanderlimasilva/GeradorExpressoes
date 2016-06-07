@@ -96,7 +96,7 @@ namespace GeradorExpressoes
                 int hits = 0;
 
                 //Grava a população gerada e seu fitness em cada rodada
-                nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
+                nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + "Geração_" + i.ToString() + "_";
                 saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
                 
                 // run one epoch of genetic algorithm
