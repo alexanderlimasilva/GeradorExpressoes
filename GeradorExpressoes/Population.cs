@@ -527,16 +527,16 @@ namespace GeradorExpressoes
 
             // Find best chromosome in the temp population
             cromo = newTempPopulation[0];
-            fitnessMax = newTempPopulation[0].Fitness;
+            double fitMax = newTempPopulation[0].Fitness;
 
             for (int i = 1; i < tournamentSize; i++)
             {
                 double fitness = newTempPopulation[i].Fitness;
 
                 // check for max
-                if (fitness < fitnessMax)
+                if (fitness < fitMax)
                 {
-                    fitnessMax = fitness;
+                    fitMax = fitness;
                     cromo = newTempPopulation[i];
                 }
             }
