@@ -258,8 +258,8 @@ namespace GeradorExpressoes
         /// 
         public void Generate( )
         {
-            // give more chance to function
-            Generate((rand.Next(4) == 3) ? ((rand.Next(4) >= 2) ? GPGeneType.Constant : GPGeneType.Argument) : GPGeneType.Function);
+            // give more chance to function and argument
+            Generate((rand.Next(4) == 3) ? ((rand.Next(4) == 3) ? GPGeneType.Constant : GPGeneType.Argument) : GPGeneType.Function);
         }
 
         /// <summary>

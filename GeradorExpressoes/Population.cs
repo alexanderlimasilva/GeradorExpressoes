@@ -34,6 +34,7 @@ namespace GeradorExpressoes
         private ISelectionMethod selectionMethod;
         private List<IChromosome> population = new List<IChromosome>( );
         private int			size;
+        private int         tournamentSize = 5;
         private double		randomSelectionPortion = 0.0;
         private bool        autoShuffling = false;
 
@@ -343,8 +344,8 @@ namespace GeradorExpressoes
                 if ( rand.NextDouble( ) <= crossoverRate )
                 {
                     // clone both ancestors
-                    IChromosome c1 = tournamentSelection(population, size); //population[i - 1].Clone();
-                    IChromosome c2 = tournamentSelection(population, size); //population[i].Clone();
+                    IChromosome c1 = tournamentSelection(population); //population[i - 1].Clone();
+                    IChromosome c2 = tournamentSelection(population); //population[i].Clone();
 
                     // do crossover
                     c1.Crossover( c2 );
@@ -442,50 +443,7 @@ namespace GeradorExpressoes
             if ( autoShuffling )
                 Shuffle( );
 
-            /*
-            //Evolui a populacao
-            Population tempPopulation = evolvePopulation(this);
-            
-            // clear current population and refill it with new population
-            population.Clear();
-
-            for (int i = 0; i < size; i++)
-            {
-                population.Add(tempPopulation[i]);
-            }
-            */
         }
-
-        /* com erro
-        /// <summary>
-        /// Novo metodo para evoluir a populacao
-        /// </summary>
-        /// <param name="pop"></param>
-        /// <returns></returns>
-        private Population evolvePopulation(Population pop)
-        {
-            Population newPopulation = new Population(pop.Size, pop.bestChromosome, pop.FitnessFunction,pop.SelectionMethod);
-
-            for (int i = 0; i< pop.size; i++ )
-            {
-                //seleciona os melhores cromossomos de acordo com o torneio
-                IChromosome c1 = tournamentSelection(pop);
-                IChromosome c2 = tournamentSelection(pop);
-
-                //realiza o crossover entre osmelhores
-                //IChromosome c = NewCrossover(c1,c2);
-
-                //calcula o fitness e adiciona o cromossomo
-                //corrigir
-                //newPopulation.AddChromosome( c );
-            }
-
-            //realiza a mutaçao
-            Mutate();
-
-            return newPopulation;
-        }
-        */
 
         /// <summary>
         /// create instance of random generator
@@ -493,38 +451,16 @@ namespace GeradorExpressoes
         protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 1));
 
         /// <summary>
-        /// Nova Implementacao do tournament selection para a populacao
+        /// Novo metodo para escolher um cromossomo para o crossover por torneio
         /// </summary>
-        /// <param name="pop"></param>
+        /// <param name="chromosomes"></param>
+        /// <param name="size"></param>
         /// <returns></returns>
-        //private IChromosome tournamentSelection(Population pop)
-        //{
-        //    int tournamentSize = 5;
-            
-        //    Population tournament = new Population(tournamentSize, pop.bestChromosome, pop.fitnessFunction, pop.selectionMethod);
-        //    //List<IChromosome> tempPopulation = population.GetRange( 0, tournamentSize );
-
-        //    for (int i = 0; i < tournamentSize; i++ )
-        //    {
-        //         // amount of random chromosomes in the new population
-        //        int randomID = (int) Math.Round(generator.Next() * pop.size);
-
-        //        //tempPopulation.RemoveAt( i );
-        //        IChromosome c = pop[randomID].Clone( );
-
-        //        //List<IChromosome> tempPopulation = population.GetRange( 0, size );
-
-        //        //corrigir
-        //        tournament.AddChromosome(pop[randomID].Clone( ));
-        //    }
-
-        //    tournament.FindBestChromosome();
-
-        //    return tournament.BestChromosome;
-        //}
-
-        public IChromosome tournamentSelection(List<IChromosome> chromosomes, int size)
+        public IChromosome tournamentSelection(List<IChromosome> chromosomes)
         {
+            // new population, initially empty
+            List<IChromosome> newTempPopulation = new List<IChromosome>();
+            
             // size of current population
             int currentSize = chromosomes.Count;
 
@@ -550,17 +486,58 @@ namespace GeradorExpressoes
                 rangeMax[k++] = s;
             }
 
-            // get wheel value
-            double wheelValue = rand.NextDouble();
+            //int randomID = (int)Math.Round(generator.Next() * currentSize);
+            //IChromosome c = chromosomes[randomID].Clone( );
 
-            // find the chromosome for the wheel value
-            for (int i = 0; i < currentSize; i++)
+            // select chromosomes from old population to the new temp population
+            for (int j = 0; j < tournamentSize; j++)
             {
-                if (wheelValue <= rangeMax[i])
+                // get wheel value
+                double wheelValue = rand.NextDouble();
+
+                // find the chromosome for the wheel value
+                for (int i = 0; i < currentSize; i++)
                 {
-                    // add the chromosome to the new population
-                    cromo = ((IChromosome)chromosomes[i]).Clone();
-                    break;
+                    if (wheelValue <= rangeMax[i])
+                    {
+                        // add the chromosome to the new population
+                        //cromo = ((IChromosome)chromosomes[i]).Clone();
+                        newTempPopulation.Add(((IChromosome)chromosomes[i]).Clone());
+                        break;
+                    }
+                }
+            }
+
+            //// Sorting
+            //for (int i = tournamentSize - 1; i >= 1; i--)
+            //{
+            //    for (int j = 0; j < i; j++)
+            //    {
+            //        if (newTempPopulation[j].Fitness > newTempPopulation[j + 1].Fitness)
+            //        {
+            //            // faz a ordenacao
+            //            IChromosome aux = newTempPopulation[j];
+            //            newTempPopulation[j] = newTempPopulation[j + 1];
+            //            newTempPopulation[j + 1] = aux;
+            //        }
+            //    }
+            //}
+
+            //cromo = newTempPopulation[0];
+
+            // Find best chromosome in the temp population
+            cromo = newTempPopulation[0];
+            fitnessMax = newTempPopulation[0].Fitness;
+
+            for (int i = 1; i < tournamentSize; i++)
+            {
+                double fitness = newTempPopulation[i].Fitness;
+
+                // check for max
+                if (fitness < fitnessMax)
+                {
+                    fitnessMax = fitness;
+                    cromo = newTempPopulation[i];
                 }
             }
 
@@ -610,13 +587,12 @@ namespace GeradorExpressoes
             {
                 for (int j = 0; j < i; j++)
                 {
-                    // generate next random number and check if we need to do crossover
                     if (population[j].Fitness > population[j+1].Fitness)
                     {
-                        // // faz a ordenacao
-                         IChromosome aux = population[j];
-                         population[j] = population[j + 1];
-                         population[j + 1] = aux;
+                        // faz a ordenacao
+                        IChromosome aux = population[j];
+                        population[j] = population[j + 1];
+                        population[j + 1] = aux;
                     }
                 }
             }
