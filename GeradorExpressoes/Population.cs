@@ -533,7 +533,7 @@ namespace GeradorExpressoes
             {
                 double fitness = newTempPopulation[i].Fitness;
 
-                // check for max
+                // check for min
                 if (fitness < fitMax)
                 {
                     fitMax = fitness;
