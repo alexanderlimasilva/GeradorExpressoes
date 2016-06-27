@@ -23,6 +23,10 @@ namespace GeradorExpressoes
         string dataset;
         string nomearq;
 
+        double sum = 0.0;
+        double error = 0.0;
+        int hits = 0;
+
         public Solution(double[,] ndata, int npopulationSize, int niterations, int nselectionMethod, int nfunctionsSet, int ngeneticMethod, Boolean bneedToStop, string instancia)
         {
             data = ndata;
@@ -93,12 +97,14 @@ namespace GeradorExpressoes
             {
                 System.Console.WriteLine("Geração: " + i.ToString());
 
-                int hits = 0;
+                hits = 0;
 
-                //Grava a população gerada e seu fitness em cada rodada
-                nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + "Geração_" + i.ToString() + "_";
-                saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
-                
+                if (i <= 10) {
+                   //Grava a população gerada e seu fitness em cada rodada
+                   nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + "Geração_" + i.ToString() + "_";
+                   saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
+                }
+
                 // run one epoch of genetic algorithm
                 //population.RunEpoch();
                 //population.Regenerate();
@@ -113,8 +119,8 @@ namespace GeradorExpressoes
                     string bestFunction = population.BestChromosome.ToString().Trim();
                     System.Console.WriteLine("Função: " + RPN2Infix.PostfixToInfix(bestFunction));
 
-                    double sum = 0.0;
-                    double error = 0.0;
+                    sum = 0.0;
+                    error = 0.0;
                     double result = 0.0;
                     double resultgerado = 0.0;
                     
@@ -183,6 +189,9 @@ namespace GeradorExpressoes
             //resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";
             resultado = resultado + "Expressão com substitução simplificada formatada: " + RPN2Infix.PostfixToInfix(expressaosimpl) + "\r\n";
+            resultado = resultado + "Erro acumulado: " + sum.ToString() + "\r\n";
+            resultado = resultado + "Erro Médio: "  + error.ToString()  + "\r\n";
+            resultado = resultado + "Hits: " + hits.ToString() + "\r\n";
 
             nomearq = "Resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
            

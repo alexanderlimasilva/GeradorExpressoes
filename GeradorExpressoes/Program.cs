@@ -25,7 +25,7 @@ namespace GeradorExpressoes
             //Thread	workerThread = null;
             bool needToStop = false;
 
-            String dataset = "abran";
+            String dataset = "teste3";
             String caminho = @"D:\Projetos C\Instancias\";
             String nomeArq = caminho + dataset + ".csv";
 
