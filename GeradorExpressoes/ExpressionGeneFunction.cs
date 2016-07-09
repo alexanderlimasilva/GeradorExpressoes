@@ -89,7 +89,7 @@ namespace GeradorExpressoes
         protected static ThreadSafeRandom rand = new ThreadSafeRandom( );
 
         // create instance of random generator
-        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(0, 1));
+        protected static IRandomNumberGenerator generator = new UniformGenerator(new Range(-10, 100));
 
         /// <summary>
         /// Gene type.
@@ -279,7 +279,7 @@ namespace GeradorExpressoes
             if (type == GPGeneType.Constant)
             {
                 // se for constante ERC gerar valor aleatorio como argumento
-                val = generator.Next();
+                val = generator.Next(); 
             }
             else 
             {

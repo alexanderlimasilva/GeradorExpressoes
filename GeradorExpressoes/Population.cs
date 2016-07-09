@@ -40,7 +40,7 @@ namespace GeradorExpressoes
 
         // population parameters
         private double		crossoverRate	= 0.75;
-        private double		mutationRate	= 0.10;
+        private double		mutationRate	= 0.50;
 
         // random number generator
         private static ThreadSafeRandom rand = new ThreadSafeRandom( );
@@ -337,12 +337,15 @@ namespace GeradorExpressoes
         /// 
         public virtual void Crossover( )
         {
+            // new population, initially empty
+            List<IChromosome> newPopulation = new List<IChromosome>();
+            
             // crossover
             for ( int i = 1; i < size; i += 2 )
             {
                 // generate next random number and check if we need to do crossover
-                if ( rand.NextDouble( ) <= crossoverRate )
-                {
+                //if ( rand.NextDouble( ) <= crossoverRate )
+                //{
                     // clone both ancestors
                     IChromosome c1 = tournamentSelection(population); //population[i - 1].Clone();
                     IChromosome c2 = tournamentSelection(population); //population[i].Clone();
@@ -355,10 +358,20 @@ namespace GeradorExpressoes
                     c2.Evaluate( fitnessFunction );
 
                     // add two new offsprings to the population
-                    population.Add( c1 );
-                    population.Add( c2 );
-                }
+                    //population.Add( c1 );
+                    //population.Add( c2 );
+
+                    // add two new offsprings to the new population
+                    newPopulation.Add( c1 );
+                    newPopulation.Add( c2 );
+                //}
             }
+
+            // empty current population
+            population.Clear();
+
+            // move elements from new to current population
+            population.AddRange(newPopulation);
         }
 
         /// <summary>
@@ -438,7 +451,7 @@ namespace GeradorExpressoes
             //SortbyFitness();
             Crossover( );
             Mutate( );
-            Selection( );
+            //Selection( );
 
             if ( autoShuffling )
                 Shuffle( );
@@ -477,13 +490,15 @@ namespace GeradorExpressoes
             // create wheel ranges
             double[] rangeMax = new double[currentSize];
             double s = 0;
-            int k = 0;
+            int k = currentSize - 1; // 0;
+
+            SortbyFitness();
 
             foreach (IChromosome c in chromosomes)
             {
                 // cumulative normalized fitness
                 s += (c.Fitness / fitnessSum);
-                rangeMax[k++] = s;
+                rangeMax[k--] = s;
             }
 
             //int randomID = (int)Math.Round(generator.Next() * currentSize);
@@ -498,7 +513,7 @@ namespace GeradorExpressoes
                 // find the chromosome for the wheel value
                 for (int i = 0; i < currentSize; i++)
                 {
-                    if (wheelValue <= rangeMax[i])
+                    if (wheelValue >= rangeMax[i])
                     {
                         // add the chromosome to the new population
                         //cromo = ((IChromosome)chromosomes[i]).Clone();
@@ -506,6 +521,9 @@ namespace GeradorExpressoes
                         break;
                     }
                 }
+
+                //int randomID = (int)Math.Round(generator.Next() * currentSize);
+                //newTempPopulation.Add(chromosomes[randomID].Clone());
             }
 
             //// Sorting

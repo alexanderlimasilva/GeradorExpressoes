@@ -62,9 +62,11 @@
     <Compile Include="IGPGene.cs" />
     <Compile Include="Intermediate.cs" />
     <Compile Include="IRandomNumberGenerator.cs" />
+    <Compile Include="ISelectionMethod.cs" />
     <Compile Include="LoadData.cs" />
     <Compile Include="MMREFitness.cs" />
     <Compile Include="Population.cs" />
+    <Compile Include="RouletteWheelSelection.cs" />
     <Compile Include="RPN2Infix.cs" />
     <Compile Include="PolishGerExpression.cs" />
     <Compile Include="Program.cs" />
