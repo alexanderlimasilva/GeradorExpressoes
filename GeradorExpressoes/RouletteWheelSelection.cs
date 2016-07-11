@@ -82,7 +82,7 @@ namespace GeradorExpressoes
 				// find the chromosome for the wheel value
 				for ( int i = 0; i < currentSize; i++ )
 				{
-					if ( wheelValue <= rangeMax[i] )
+					if ( wheelValue >= rangeMax[i] )
 					{
 						// add the chromosome to the new population
 						newPopulation.Add( ((IChromosome) chromosomes[i]).Clone( ) );

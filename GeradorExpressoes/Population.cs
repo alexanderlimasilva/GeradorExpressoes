@@ -364,7 +364,7 @@ namespace GeradorExpressoes
                     // add two new offsprings to the new population
                     newPopulation.Add( c1 );
                     newPopulation.Add( c2 );
-                //}
+               // }
             }
 
             // empty current population
@@ -435,7 +435,7 @@ namespace GeradorExpressoes
                 }
             }
 
-            FindBestChromosome( );
+            //FindBestChromosome( );
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace GeradorExpressoes
         /// 
         public void RunEpoch( )
         {
-            //SortbyFitness();
+           //SortbyFitness();
             Crossover( );
             Mutate( );
             //Selection( );
@@ -487,19 +487,19 @@ namespace GeradorExpressoes
                 fitnessSum += c.Fitness;
             }
 
-            // create wheel ranges
-            double[] rangeMax = new double[currentSize];
-            double s = 0;
-            int k = currentSize - 1; // 0;
+            //// create wheel ranges
+            //double[] rangeMax = new double[currentSize];
+            //double s = 0;
+            //int k = currentSize - 1; // 0;
 
-            SortbyFitness();
+            //SortbyFitness();
 
-            foreach (IChromosome c in chromosomes)
-            {
-                // cumulative normalized fitness
-                s += (c.Fitness / fitnessSum);
-                rangeMax[k--] = s;
-            }
+            //foreach (IChromosome c in chromosomes)
+            //{
+            //    // cumulative normalized fitness
+            //    s += (c.Fitness / fitnessSum);
+            //    rangeMax[k--] = s;
+            //}
 
             //int randomID = (int)Math.Round(generator.Next() * currentSize);
             //IChromosome c = chromosomes[randomID].Clone( );
@@ -507,23 +507,27 @@ namespace GeradorExpressoes
             // select chromosomes from old population to the new temp population
             for (int j = 0; j < tournamentSize; j++)
             {
-                // get wheel value
-                double wheelValue = rand.NextDouble();
+                //// get wheel value
+                //double wheelValue = rand.NextDouble();
 
-                // find the chromosome for the wheel value
-                for (int i = 0; i < currentSize; i++)
-                {
-                    if (wheelValue >= rangeMax[i])
-                    {
-                        // add the chromosome to the new population
-                        //cromo = ((IChromosome)chromosomes[i]).Clone();
-                        newTempPopulation.Add(((IChromosome)chromosomes[i]).Clone());
-                        break;
-                    }
-                }
+                //// find the chromosome for the wheel value
+                //for (int i = 0; i < currentSize; i++)
+                //{
+                //    if (wheelValue >= rangeMax[i])
+                //    {
+                //        // add the chromosome to the new population
+                //        //cromo = ((IChromosome)chromosomes[i]).Clone();
+                //        newTempPopulation.Add(((IChromosome)chromosomes[i]).Clone());
+                //        break;
+                //    }
+                //}
 
-                //int randomID = (int)Math.Round(generator.Next() * currentSize);
-                //newTempPopulation.Add(chromosomes[randomID].Clone());
+                int randomID = (int)Math.Round(generator.Next() * currentSize);
+
+                if (randomID < 0) { randomID = 0; }
+                if (randomID >= currentSize) { randomID = currentSize - 1; }
+
+                newTempPopulation.Add(chromosomes[randomID].Clone());
             }
 
             //// Sorting
