@@ -344,27 +344,33 @@ namespace GeradorExpressoes
             for ( int i = 1; i < size; i += 2 )
             {
                 // generate next random number and check if we need to do crossover
-                //if ( rand.NextDouble( ) <= crossoverRate )
-                //{
-                    // clone both ancestors
+                if (rand.NextDouble() <= crossoverRate)
+                {
+                    // faz o torneio para escolher os ancestrais
                     IChromosome c1 = tournamentSelection(population); //population[i - 1].Clone();
                     IChromosome c2 = tournamentSelection(population); //population[i].Clone();
 
                     // do crossover
-                    c1.Crossover( c2 );
+                    c1.Crossover(c2);
 
                     // calculate fitness of these two offsprings
-                    c1.Evaluate( fitnessFunction );
-                    c2.Evaluate( fitnessFunction );
+                    c1.Evaluate(fitnessFunction);
+                    c2.Evaluate(fitnessFunction);
 
                     // add two new offsprings to the population
                     //population.Add( c1 );
                     //population.Add( c2 );
 
                     // add two new offsprings to the new population
-                    newPopulation.Add( c1 );
-                    newPopulation.Add( c2 );
-               // }
+                    newPopulation.Add(c1);
+                    newPopulation.Add(c2);
+                }
+                else
+                {
+                    // clone both ancestors
+                    newPopulation.Add(population[i - 1].Clone());
+                    newPopulation.Add(population[i].Clone());
+                }
             }
 
             // empty current population
