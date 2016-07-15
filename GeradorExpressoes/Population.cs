@@ -390,6 +390,9 @@ namespace GeradorExpressoes
         /// 
         public virtual void Mutate( )
         {
+            // new population, initially empty
+            List<IChromosome> newPopulation = new List<IChromosome>();
+            
             // mutate
             for ( int i = 0; i < size; i++ )
             {
@@ -403,9 +406,23 @@ namespace GeradorExpressoes
                     // calculate fitness of the mutant
                     c.Evaluate( fitnessFunction );
                     // add mutant to the population
-                    population.Add( c );
+                    //population.Add( c );
+
+                    // add mutant to the new population
+                    newPopulation.Add(c);
+                }
+                else
+                {
+                    // clone both ancestors
+                    newPopulation.Add(population[i].Clone());
                 }
             }
+
+            // empty current population
+            population.Clear();
+
+            // move elements from new to current population
+            population.AddRange(newPopulation);
         }
 
         /// <summary>
@@ -800,6 +817,9 @@ namespace GeradorExpressoes
         {
             string[] tokens;
 
+            // size of current population
+            int currentSize = population.Count;
+
             if (bestChromosome == null)
             {
                 bestChromosome = population[0];
@@ -809,28 +829,28 @@ namespace GeradorExpressoes
                 tokens = population[0].ToString().Trim().Split(' ');
                 maxNodes = tokens.Length;
             }
-             
-                for (int i = 1; i < size; i++)
+
+            for (int i = 1; i < currentSize; i++)
+            {
+                double fitness = population[i].Fitness;
+
+                tokens = population[i].ToString().Trim().Split(' ');
+                double totNodes = tokens.Length;
+
+                // accumulate summary value
+                fitnessSum += fitness;
+
+                // check for min or min nodes
+                if ((fitness < fitnessMax) || ((fitness == fitnessMax) && (totNodes < maxNodes)))
                 {
-                    double fitness = population[i].Fitness;
-
-                    tokens = population[i].ToString().Trim().Split(' ');
-                    double totNodes = tokens.Length;
-
-                    // accumulate summary value
-                    fitnessSum += fitness;
-
-                    // check for min or min nodes
-                    if ((fitness < fitnessMax) || ((fitness == fitnessMax) && (totNodes < maxNodes)))
-                    {
-                        fitnessMax = fitness;
-                        bestChromosome = population[i];
-                        maxNodes = totNodes;
-                    }
-
+                   fitnessMax = fitness;
+                   bestChromosome = population[i];
+                   maxNodes = totNodes;
                 }
 
-                fitnessAvg = fitnessSum / size;
+            }
+
+            fitnessAvg = fitnessSum / size;
         }
 
         /// <summary>
