@@ -51,6 +51,8 @@ namespace GeradorExpressoes
         private double		fitnessSum = 0;
         private double		fitnessAvg = 0;
         private IChromosome	bestChromosome = null;
+        private int         bestGeneration = 0;
+        private int         actualGeneration = 0;
 
         /// <summary>
         /// Crossover rate, [0.1, 1].
@@ -244,6 +246,32 @@ namespace GeradorExpressoes
         }
 
         /// <summary>
+        /// Generation of the population.
+        /// </summary>
+        /// 
+        /// <remarks>The property keeps the generation of the best chromosome.</remarks>
+        /// 
+        public int BestGeneration
+        {
+            get { return bestGeneration; }
+        }
+
+        /// <summary>
+        /// Generation of the population.
+        /// </summary>
+        /// 
+        /// <remarks>The property keeps the generation of the best chromosome.</remarks>
+        /// 
+        public int ActualGeneration
+        {
+            get { return actualGeneration; }
+            set
+            {
+                actualGeneration = value;
+            }
+        }
+
+        /// <summary>
         /// Get chromosome with specified index.
         /// </summary>
         /// 
@@ -406,10 +434,10 @@ namespace GeradorExpressoes
                     // calculate fitness of the mutant
                     c.Evaluate( fitnessFunction );
                     // add mutant to the population
-                    //population.Add( c );
+                    population.Add( c );
 
                     // add mutant to the new population
-                    newPopulation.Add(c);
+                    //newPopulation.Add(c);
                 }
                 //else
                 //{
@@ -846,6 +874,7 @@ namespace GeradorExpressoes
                    fitnessMax = fitness;
                    bestChromosome = population[i];
                    maxNodes = totNodes;
+                   bestGeneration = actualGeneration;
                 }
 
             }

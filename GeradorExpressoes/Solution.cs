@@ -22,6 +22,7 @@ namespace GeradorExpressoes
         bool useFunction = false;
         string dataset;
         string nomearq;
+        string testeexpressao;
 
         double sum = 0.0;
         double error = 0.0;
@@ -99,13 +100,14 @@ namespace GeradorExpressoes
 
                 hits = 0;
 
-                if (i <= 50) {
+                if (i <= 10) {
                    //Grava a população gerada e seu fitness em cada rodada
                    nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + "Geração_" + i.ToString() + "_";
                    saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
                 }
 
                 // run one epoch of genetic algorithm
+                population.ActualGeneration = i;
                 //population.RunEpoch();
                 //population.Regenerate();
                 //population.toString();
@@ -131,7 +133,7 @@ namespace GeradorExpressoes
                         double PROBABLY_ZERO = 1.11E-15;
                         double BIG_NUMBER = 1.0e15;
                         
-                        System.Console.WriteLine("Valor de entrada: " + input[j]);
+                        //System.Console.WriteLine("Valor de entrada: " + input[j]);
 
                         resultgerado = PolishGerExpression.Evaluate(bestFunction, input, j);
 
@@ -149,7 +151,8 @@ namespace GeradorExpressoes
                         sum += result;   
   
                         //impressao dos dados gerados e esperados
-                        System.Console.WriteLine("Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result);
+                        testeexpressao = "Valor de entrada: " + input[j] + " Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result;
+                        System.Console.WriteLine(testeexpressao);
                     }
 
                     // calculate error
@@ -189,9 +192,11 @@ namespace GeradorExpressoes
             //resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";
             resultado = resultado + "Expressão com substitução simplificada formatada: " + RPN2Infix.PostfixToInfix(expressaosimpl) + "\r\n";
+            resultado = resultado + "Resultado para a expressão: " + testeexpressao + "\r\n";
             resultado = resultado + "Erro acumulado: " + sum.ToString() + "\r\n";
             resultado = resultado + "Erro Médio: "  + error.ToString()  + "\r\n";
             resultado = resultado + "Hits: " + hits.ToString() + "\r\n";
+            resultado = resultado + "Geração: " + population.BestGeneration + "\r\n";
 
             nomearq = "Resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset;
            
