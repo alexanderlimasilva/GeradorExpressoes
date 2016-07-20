@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EliteSelection.cs" />
     <Compile Include="ExpressionGeneFunction.cs" />
     <Compile Include="GEPChromosome.cs" />
     <Compile Include="GPTreeChromosome.cs" />

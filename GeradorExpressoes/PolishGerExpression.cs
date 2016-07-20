@@ -350,11 +350,9 @@ namespace GeradorExpressoes
 
         private static double ExecuteBinaryFunction(string function, double arg1, double arg2)
         {
-
             // check for function
             switch (function)
             {
-
                 case "+":			// addition
                     return arg1 + arg2;
 
@@ -374,7 +372,6 @@ namespace GeradorExpressoes
                     // throw exception informing about undefined function
                     throw new ArgumentException("Unsupported function: " + function);
             }
-
         }
 
     }

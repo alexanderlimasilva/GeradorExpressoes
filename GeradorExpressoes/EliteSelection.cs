@@ -6,11 +6,13 @@
 // andrew.kirillov@aforgenet.com
 //
 
-namespace AForge.Genetic
+namespace GeradorExpressoes
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using AForge;
+    using AForge.Genetic;
 
     /// <summary>
     /// Elite selection method.
@@ -39,7 +41,25 @@ namespace AForge.Genetic
         public void ApplySelection( List<IChromosome> chromosomes, int size )
         {
             // sort chromosomes
-            chromosomes.Sort( );
+            //chromosomes.Sort( );
+
+            // current population size
+            int elitesize = chromosomes.Count;
+
+            // Sorting by fitness
+            for (int i = elitesize - 1; i >= 1; i--)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (chromosomes[j].Fitness > chromosomes[j + 1].Fitness)
+                    {
+                        // faz a ordenacao
+                        IChromosome aux = chromosomes[j];
+                        chromosomes[j] = chromosomes[j + 1];
+                        chromosomes[j + 1] = aux;
+                    }
+                }
+            }
 
             // remove bad chromosomes
             chromosomes.RemoveRange( size, chromosomes.Count - size );

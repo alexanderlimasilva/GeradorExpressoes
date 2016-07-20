@@ -133,7 +133,7 @@ namespace GeradorExpressoes
                         double PROBABLY_ZERO = 1.11E-15;
                         double BIG_NUMBER = 1.0e15;
                         
-                        //System.Console.WriteLine("Valor de entrada: " + input[j]);
+                        System.Console.WriteLine("Valor de entrada: " + input[j]);
 
                         resultgerado = PolishGerExpression.Evaluate(bestFunction, input, j);
 
@@ -151,8 +151,9 @@ namespace GeradorExpressoes
                         sum += result;   
   
                         //impressao dos dados gerados e esperados
-                        testeexpressao = "Valor de entrada: " + input[j] + " Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result;
-                        System.Console.WriteLine(testeexpressao);
+                        //testeexpressao = testeexpressao + "Valor de entrada: " + input[j] + " Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result + "\r\n";
+                        //System.Console.WriteLine(testeexpressao);
+                        System.Console.WriteLine(" Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result);
                     }
 
                     // calculate error
@@ -192,7 +193,7 @@ namespace GeradorExpressoes
             //resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";
             resultado = resultado + "Expressão com substitução simplificada formatada: " + RPN2Infix.PostfixToInfix(expressaosimpl) + "\r\n";
-            resultado = resultado + "Resultado para a expressão: " + testeexpressao + "\r\n";
+            resultado = resultado + "Resultado para a expressão: " + "\r\n";        // +testeexpressao + "\r\n";
             resultado = resultado + "Erro acumulado: " + sum.ToString() + "\r\n";
             resultado = resultado + "Erro Médio: "  + error.ToString()  + "\r\n";
             resultado = resultado + "Hits: " + hits.ToString() + "\r\n";
