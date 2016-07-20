@@ -29,7 +29,7 @@ namespace GeradorExpressoes
                 // le o arquivo
                 while ((i < maxData) && ((str = reader.ReadLine()) != null))
                 {
-                    string[] strs = str.Split(';');
+                    string[] strs = str.Split('\t');   // ';'
                     if (strs.Length == 1)
                         strs = str.Split(',');
 

@@ -27,7 +27,7 @@ namespace GeradorExpressoes
 
             String dataset = "abran";
             String caminho = @"D:\Projetos C\Instancias\";
-            String nomeArq = caminho + dataset + ".csv";
+            String nomeArq = caminho + dataset + ".dat";
 
             double[,] data = null;
 
