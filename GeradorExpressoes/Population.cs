@@ -386,26 +386,26 @@ namespace GeradorExpressoes
                     c2.Evaluate(fitnessFunction);
 
                     // add two new offsprings to the population
-                    population.Add( c1 );
-                    population.Add( c2 );
+                    //population.Add( c1 );
+                    //population.Add( c2 );
 
                     // add two new offsprings to the new population
-                    //newPopulation.Add(c1);
-                    //newPopulation.Add(c2);
+                    newPopulation.Add(c1);
+                    newPopulation.Add(c2);
                 }
-                //else
-                //{
+                else
+                {
                 //     clone both ancestors
-                //    newPopulation.Add(population[i - 1].Clone());
-                //    newPopulation.Add(population[i].Clone());
-                //}
+                    newPopulation.Add(population[i - 1].Clone());
+                    newPopulation.Add(population[i].Clone());
+                }
             }
 
             // empty current population
-            //population.Clear();
+            population.Clear();
 
             // move elements from new to current population
-            //population.AddRange(newPopulation);
+            population.AddRange(newPopulation);
         }
 
         /// <summary>
@@ -502,7 +502,7 @@ namespace GeradorExpressoes
            //SortbyFitness();
             Crossover( );
             Mutate( );
-            Selection( );
+            //Selection( );
 
             if ( autoShuffling )
                 Shuffle( );
