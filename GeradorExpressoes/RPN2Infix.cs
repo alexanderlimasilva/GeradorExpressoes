@@ -8,118 +8,119 @@ namespace GeradorExpressoes
 {
     class RPN2Infix
     {
-        ////// operator ranking
-        ////private enum Rank { Primary, Unary, Mul, Sum, }
-        ////private static Dictionary<string, Rank> _rank = new Dictionary<string, Rank>()
-        ////{
-        ////    { "#", Rank.Unary }, { "square", Rank.Unary }, { "exp", Rank.Unary }, { "sqrt", Rank.Unary }, { "ln", Rank.Unary  },  // unary minus is coded as "#", unary plus is left out
-        ////    { "*", Rank.Mul }, { "/", Rank.Mul }, { "^", Rank.Mul },  
-        ////    { "+", Rank.Sum }, { "-", Rank.Sum },                     // binary op
-        ////};
+        // operator ranking
+        private enum Rank { Primary, Unary, Mul, Sum, }
+        private static Dictionary<string, Rank> _rank = new Dictionary<string, Rank>()
+        {
+            { "#", Rank.Unary }, { "square", Rank.Unary }, { "exp", Rank.Unary }, { "sqrt", Rank.Unary }, { "ln", Rank.Unary  },  // unary minus is coded as "#", unary plus is left out
+            { "*", Rank.Mul }, { "/", Rank.Mul }, { "^", Rank.Mul },  
+            { "+", Rank.Sum }, { "-", Rank.Sum },                     // binary op
+        };
 
-        ////// base class
-        ////private abstract class Expr
-        ////{
-        ////    internal Rank Rank { get; set; }
-        ////    internal abstract void Write(StringBuilder sb);
-        ////}
+        // base class
+        private abstract class Expr
+        {
+            internal Rank Rank { get; set; }
+            internal abstract void Write(StringBuilder sb);
+        }
 
-        ////// literal number
-        ////private class Number : Expr
-        ////{
-        ////    private string Value { get; set; }
-        ////    internal Number(string value) { Value = value; Rank = Rank.Primary; }
-        ////    internal override void Write(StringBuilder sb) { sb.Append(Value); }
-        ////}
+        // literal number
+        private class Number : Expr
+        {
+            private string Value { get; set; }
+            internal Number(string value) { Value = value; Rank = Rank.Primary; }
+            internal override void Write(StringBuilder sb) { sb.Append(Value); }
+        }
 
-        ////// binary operations
-        ////private class BinExpr : Expr
-        ////{
-        ////    private Expr Left { get;  set; }
-        ////    private Expr Right { get;  set; }
-        ////    private string Op { get; set; }
-            
-        ////    private BinExpr(Expr left, Expr right, string op) 
-        ////    { Left = left; Right = right; Op = op; Rank = _rank[op]; }
-            
-        ////    static internal Expr Create(Stack<Expr> stack, string op)
-        ////    {
-        ////        Expr right = NestedExpr.NestedIfNeeded(stack.Pop(), op);
-        ////        Expr left = NestedExpr.NestedIfNeeded(stack.Pop(), op);
-        ////        return new BinExpr(left, right, op);
-        ////    }
-        ////    internal override void Write(StringBuilder sb) { Left.Write(sb); sb.Append(Op); Right.Write(sb); }
-        ////}
+        // binary operations
+        private class BinExpr : Expr
+        {
+            private Expr Left { get; set; }
+            private Expr Right { get; set; }
+            private string Op { get; set; }
 
-        ////// unary operations
-        ////private class UnaryExpr : Expr
-        ////{
-        ////    private string Op { get; set; }
-        ////    private Expr Expr { get; set; }
+            private BinExpr(Expr left, Expr right, string op)
+            { Left = left; Right = right; Op = op; Rank = _rank[op]; }
 
-        ////    private UnaryExpr(Expr expr, string op) { Expr=expr; Op=op; Rank=_rank[op]; }
-            
-        ////    static internal Expr Create(Stack<Expr> stack, string op)
-        ////    {
-        ////        Expr expr = NestedExpr.NestedIfNeeded(stack.Pop(), op);
-        ////        return new UnaryExpr(expr, op);
-        ////    }
-            
-        ////    internal override void Write(StringBuilder sb)
-        ////    { sb.Append("("); sb.Append(Op == "#" ? "-" : Op); Expr.Write(sb); sb.Append(")");  }
-        ////}
+            static internal Expr Create(Stack<Expr> stack, string op)
+            {
+                Expr right = NestedExpr.NestedIfNeeded(stack.Pop(), op);
+                Expr left = NestedExpr.NestedIfNeeded(stack.Pop(), op);
+                return new BinExpr(left, right, op);
+            }
+            internal override void Write(StringBuilder sb) { Left.Write(sb); sb.Append(Op); Right.Write(sb); }
+        }
 
-        ////// nested expression
-        ////private class NestedExpr : Expr
-        ////{
-        ////    internal Expr Expr { get; private set; }
-        ////    private NestedExpr(Expr expr) { Expr = expr; Rank = Rank.Primary; }
-        ////    internal override void Write(StringBuilder sb) { sb.Append("("); Expr.Write(sb); sb.Append(")"); }
-        ////    internal static Expr NestedIfNeeded(Expr expr, string op)
-        ////    { return expr.Rank > _rank[op] ? new NestedExpr(expr) : expr; }
-        ////}
+        // unary operations
+        private class UnaryExpr : Expr
+        {
+            private string Op { get; set; }
+            private Expr Expr { get; set; }
 
-        ////// scanner
-        //////private static string _tokenizer = @"\s*(\d+|\S)\s*";
-        ////private static string[] _unary = new string[] { "#" };
+            private UnaryExpr(Expr expr, string op) { Expr = expr; Op = op; Rank = _rank[op]; }
 
-        ////private static bool IsNumber(string token)
-        ////{ return string.IsNullOrEmpty(token) || token.Length < 1 ? false : char.IsNumber(token[0]); }
-        
-        ////private static bool IsUnary(string token) { return _unary.Contains(token); }
-        
-        ////// parser
-        ////private Stack<Expr> Stack { get; set; }
-        ////private IEnumerable<string> Tokens { get; set; }
-        
-        ////// initialize
-        ////private RPN2Infix(string input)
-        ////{
-        ////    //Tokens = Regex.Matches(input, _tokenizer, RegexOptions.Compiled|RegexOptions.Singleline).Cast<Match>().Select(m=>m.Groups[1].Value);
-        ////    Tokens = input.Split(' ');
-        ////    Stack = new Stack<Expr>();
-        ////}
-        
-        ////// parse
-        ////private string Parse()
-        ////{
-        ////    foreach (string token in Tokens)
-        ////    {
-        ////        if (IsNumber(token)) Stack.Push(new Number(token));
-        ////        else if (IsUnary(token)) Stack.Push(UnaryExpr.Create(Stack, token));
-        ////        else Stack.Push(BinExpr.Create(Stack, token));
-        ////    }
+            static internal Expr Create(Stack<Expr> stack, string op)
+            {
+                Expr expr = NestedExpr.NestedIfNeeded(stack.Pop(), op);
+                return new UnaryExpr(expr, op);
+            }
 
-        ////    StringBuilder sb = new StringBuilder();
-        ////    Stack.Pop().Write(sb);
-        ////    return sb.ToString();
-        ////}
+            internal override void Write(StringBuilder sb)
+            { sb.Append("("); sb.Append(Op == "#" ? "-" : Op); Expr.Write(sb); sb.Append(")"); }
+        }
 
-        ////// public access
-        ////public static string Parse(string input)
-        ////{
-        ////    return new RPN2Infix(input).Parse();
-        ////}
+        // nested expression
+        private class NestedExpr : Expr
+        {
+            internal Expr Expr { get; private set; }
+            private NestedExpr(Expr expr) { Expr = expr; Rank = Rank.Primary; }
+            internal override void Write(StringBuilder sb) { sb.Append("("); Expr.Write(sb); sb.Append(")"); }
+            internal static Expr NestedIfNeeded(Expr expr, string op)
+            { return expr.Rank > _rank[op] ? new NestedExpr(expr) : expr; }
+        }
+
+        // scanner
+        private static string _tokenizer = @"\s*(\d+|\S)\s*";
+        private static string[] _unary = new string[] { "#" };
+
+        private static bool IsNumber(string token)
+        { return string.IsNullOrEmpty(token) || token.Length < 1 ? false : char.IsNumber(token[0]); }
+
+        private static bool IsUnary(string token) { return _unary.Contains(token); }
+
+        // parser
+        private Stack<Expr> Stack { get; set; }
+        private IEnumerable<string> Tokens { get; set; }
+
+        // initialize
+        private RPN2Infix(string input)
+        {
+            //Tokens = Regex.Matches(input, _tokenizer, RegexOptions.Compiled|RegexOptions.Singleline).Cast<Match>().Select(m=>m.Groups[1].Value);
+            Tokens = input.Split(' ');
+            Stack = new Stack<Expr>();
+        }
+
+        // parse
+        private string Parse()
+        {
+            foreach (string token in Tokens)
+            {
+                if (IsNumber(token)) Stack.Push(new Number(token));
+                else if (token == "X") Stack.Push(new Number(token));
+                else if (IsUnary(token)) Stack.Push(UnaryExpr.Create(Stack, token));
+                else Stack.Push(BinExpr.Create(Stack, token));
+            }
+
+            StringBuilder sb = new StringBuilder();
+            Stack.Pop().Write(sb);
+            return sb.ToString();
+        }
+
+        // public access
+        public static string Parse(string input)
+        {
+            return new RPN2Infix(input).Parse();
+        }
 
         //
         // PostfixToInfix

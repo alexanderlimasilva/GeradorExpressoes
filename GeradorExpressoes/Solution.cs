@@ -67,7 +67,7 @@ namespace GeradorExpressoes
                                          (ISelectionMethod)new RouletteWheelSelection()
                 );
 
-            // iterations
+            // iterations ou numero de gerações a serem utilizadas
             int i = 1;
 
             // solution array
@@ -100,7 +100,7 @@ namespace GeradorExpressoes
 
                 hits = 0;
 
-                if (i <= 10) {
+                if (i <= 1) {
                    //Grava a população gerada e seu fitness em cada rodada
                    nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + "Geração_" + i.ToString() + "_";
                    saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq);
@@ -109,8 +109,6 @@ namespace GeradorExpressoes
                 // run one epoch of genetic algorithm
                 population.ActualGeneration = i;
                 //population.RunEpoch();
-                //population.Regenerate();
-                //population.toString();
                 //population.FindBestChromosome();
                 
                 try
@@ -170,12 +168,13 @@ namespace GeradorExpressoes
                     System.Console.WriteLine(e.Message);
                 }
 
-                // increase current iteration
+                // increase current iteration/geracao
                 i++;
 
                 //
-                if ((iterations != 0) && (i > iterations))  //|| ( hits == 15)
-                    break;
+                if ((iterations != 0) && (i > iterations))
+                    //break;
+                    needToStop = true;
                 else
                     population.RunEpoch();
             }
@@ -188,7 +187,8 @@ namespace GeradorExpressoes
 
             string resultado = "";
             resultado = "Expressão NPR gerada: " + expressao + "\r\n";
-            resultado = resultado + "Expressão formatada: " + (RPN2Infix.PostfixToInfix(expressao)) + "\r\n";
+            resultado = resultado + "Expressão formatada 1: " + (RPN2Infix.PostfixToInfix(expressao)) + "\r\n";
+            resultado = resultado + "Expressão formatada 2: " + (RPN2Infix.Parse(expressao.Replace(",", "."))).Replace(".", ",") + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução: " + expressaosubst + "\r\n";
             //resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";
