@@ -56,7 +56,6 @@ namespace GeradorExpressoes
         {
             private string Op { get; set; }
             private Expr Expr { get; set; }
-
             private UnaryExpr(Expr expr, string op) { Expr = expr; Op = op; Rank = _rank[op]; }
 
             static internal Expr Create(Stack<Expr> stack, string op)
@@ -66,7 +65,9 @@ namespace GeradorExpressoes
             }
 
             internal override void Write(StringBuilder sb)
-            { sb.Append("("); sb.Append(Op == "#" ? "-" : Op); Expr.Write(sb); sb.Append(")"); }
+            //{ sb.Append("("); sb.Append(Op == "#" ? "-" : Op); Expr.Write(sb); sb.Append(")"); }
+            {sb.Append(Op == "#" ? "(-" : (_unary.Contains(Op) ? Op + "(" : Op)); Expr.Write(sb); sb.Append(")");}
+
         }
 
         // nested expression
@@ -74,14 +75,14 @@ namespace GeradorExpressoes
         {
             internal Expr Expr { get; private set; }
             private NestedExpr(Expr expr) { Expr = expr; Rank = Rank.Primary; }
-            internal override void Write(StringBuilder sb) { sb.Append("("); Expr.Write(sb); sb.Append(")"); }
+            internal override void Write(StringBuilder sb) { sb.Append("("); Expr.Write(sb); sb.Append(")"); }         
             internal static Expr NestedIfNeeded(Expr expr, string op)
             { return expr.Rank > _rank[op] ? new NestedExpr(expr) : expr; }
         }
 
         // scanner
-        private static string _tokenizer = @"\s*(\d+|\S)\s*";
-        private static string[] _unary = new string[] { "#" };
+        //private static string _tokenizer = @"\s*(\d+|\S)\s*";
+        private static string[] _unary = new string[] { "#","square","exp","sqrt","ln"};
 
         private static bool IsNumber(string token)
         { return string.IsNullOrEmpty(token) || token.Length < 1 ? false : char.IsNumber(token[0]); }

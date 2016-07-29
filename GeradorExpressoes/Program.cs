@@ -19,7 +19,7 @@ namespace GeradorExpressoes
             int execucoes = 1;
             int indDataSet = 1;
             int populationSize = 100;
-            int iterations = 30;
+            int iterations = 300000;
             int selectionMethod = 2;
             int functionsSet = 1;
             int geneticMethod = 0;
@@ -63,7 +63,7 @@ namespace GeradorExpressoes
             for (int j = 1; j <= execucoes; j++)
             {
                 // Criação do objeto solução
-                Solution solution = new Solution(data, populationSize, iterations, selectionMethod, functionsSet, geneticMethod, needToStop, dataset);
+                Solution solution = new Solution(data, populationSize, iterations, selectionMethod, functionsSet, geneticMethod, needToStop, dataset, j);
 
                 // Criação do objeto do thread. Não inicia o thread.
                 //workerThread = new Thread(new ThreadStart(solution.SearchSolution));

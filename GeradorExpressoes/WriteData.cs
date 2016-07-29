@@ -9,13 +9,19 @@ namespace GeradorExpressoes
     class WriteData
     {
 
-        public void escreveArquivo(String texto, string arquivo)
+        public void escreveArquivo(String texto, String arquivo, int adicionaDataHora)
         {
 
-            String nomeArq = @"D:\Projetos C\Resultados\" + arquivo + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
+            String nomeArq = @"D:\Projetos C\Resultados\" + arquivo;
+
+            if (adicionaDataHora == 1) { 
+               nomeArq += DateTime.Now.ToString("yyyyMMdd_HHmmss"); 
+            }
+            
+            nomeArq += ".txt";
 
             //Declaração do método StreamWriter passando o caminho e nome do arquivo que deve ser salvo
-            StreamWriter writer = new StreamWriter(nomeArq);
+            StreamWriter writer = new StreamWriter(nomeArq, true);
 
             writer.Write(texto);
 
@@ -25,6 +31,5 @@ namespace GeradorExpressoes
             //Limpando a referencia dele da memória
             writer.Dispose();
         }
-
     }
 }
