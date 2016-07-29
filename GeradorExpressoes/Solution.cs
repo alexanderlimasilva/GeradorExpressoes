@@ -23,14 +23,15 @@ namespace GeradorExpressoes
         bool useFunction = false;
         string dataset;
         string nomearq;
-        string testeexpressao;
 
         double sum = 0.0;
         double error = 0.0;
+        double pred = 0.0;
         double bestMMRE = 1.0e15;
         int hits = 0;
+        int npred = 0;
 
-        public Solution(double[,] ndata, int npopulationSize, int niterations, int nselectionMethod, int nfunctionsSet, int ngeneticMethod, Boolean bneedToStop, string instancia, int repeticoes)
+        public Solution(double[,] ndata, int npopulationSize, int niterations, int nselectionMethod, int nfunctionsSet, int ngeneticMethod, Boolean bneedToStop, string instancia, int nrepeticoes)
         {
             data = ndata;
             populationSize = npopulationSize;
@@ -40,7 +41,7 @@ namespace GeradorExpressoes
             geneticMethod = ngeneticMethod;
             needToStop =  bneedToStop;
             dataset = instancia;
-            executions = repeticoes;
+            executions = nrepeticoes;
         }
 
         // função a verificar
@@ -108,8 +109,8 @@ namespace GeradorExpressoes
                    nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + "Geração_" + i.ToString() + "_";
                    saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq, 1);
 
-                   nomearq = "EvolucaoMMRE" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString();
-                   saida.escreveArquivo("Geração" + "\t" + "MMRE" + "\r\n", nomearq, 0);
+                   nomearq = "AnalisedeTempo" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + iterations.ToString();
+                   saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Geração" + "\t" + "MMRE" + "\r\n", nomearq, 0);
                 }
 
                 // run one epoch of genetic algorithm
@@ -125,8 +126,10 @@ namespace GeradorExpressoes
                     string bestFunction = population.BestChromosome.ToString().Trim();
                     System.Console.WriteLine("Função: " + RPN2Infix.PostfixToInfix(bestFunction));
 
+                    npred = 0;
                     sum = 0.0;
                     error = 0.0;
+                    pred = 0.00;
                     double result = 0.0;
                     double resultgerado = 0.0;
                     
@@ -152,21 +155,27 @@ namespace GeradorExpressoes
 
                         if (result <= HIT_LEVEL) hits++;  // whatever!
 
+                        //Somatorio do erro
                         sum += result;   
+
+                        //Somatoria do pred com 25%
+                        if ((resultgerado <= output[j] * 1.25) && (resultgerado >= output[j] * 0.75)) npred++; 
   
                         //impressao dos dados gerados e esperados
-                        //testeexpressao = testeexpressao + "Valor de entrada: " + input[j] + " Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result + "\r\n";
-                        //System.Console.WriteLine(testeexpressao);
                         System.Console.WriteLine(" Valor gerado: " + resultgerado + " resultado esperado: " + data[j, 0] + " erro relativo: " + result);
                     }
 
-                    // calculate error
+                    // calculate error MMRE
                     error = sum / data.GetLength(0);
+                    
+                    //calculate Pred(25%)
+                    pred = (((double) npred) / data.GetLength(0));
 
                     if (error < bestMMRE)
                     {
                         bestMMRE = error;
-                        saida.escreveArquivo(i.ToString() + "\t" + bestMMRE.ToString() +"\r\n", nomearq, 0);
+                        nomearq = "AnalisedeTempo" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + iterations.ToString();
+                        saida.escreveArquivo(dataset + "\t" + ((geneticMethod == 0) ? "GP" : "GEP") + "\t" + i.ToString() + "\t" + bestMMRE.ToString() + "\r\n", nomearq, 0);
                     }
 
                     System.Console.WriteLine("Erro acumulado: " + sum);
@@ -208,15 +217,17 @@ namespace GeradorExpressoes
             resultado = resultado + "Resultado para a expressão: " + "\r\n";        // +testeexpressao + "\r\n";
             resultado = resultado + "Erro acumulado: " + sum.ToString() + "\r\n";
             resultado = resultado + "Erro Médio: "  + error.ToString()  + "\r\n";
+            resultado = resultado + "Pred(25): " + pred.ToString() + "\r\n";
             resultado = resultado + "Hits: " + hits.ToString() + "\r\n";
             resultado = resultado + "Geração: " + population.BestGeneration + "\r\n";
 
-            nomearq = "Resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString();
-           
-            //WriteData saida = new WriteData();
+            nomearq = "Resultado" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_";
             saida.escreveArquivo(resultado, nomearq, 1);
 
-            System.Console.WriteLine("Fim do Programa");
+            nomearq = "Experimento" + ((geneticMethod == 0) ? "_GP_" : "_GEP_");
+            saida.escreveArquivo(dataset + "\t" + ((geneticMethod == 0) ? "GP" : "GEP") + "\t" + executions.ToString() + "\t" + error.ToString() + "\t" + pred.ToString() + "\r\n", nomearq, 0);
+            
+            //System.Console.WriteLine("Fim do Programa");
         }
 
     }
