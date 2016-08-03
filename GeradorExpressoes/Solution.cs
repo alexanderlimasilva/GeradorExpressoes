@@ -106,11 +106,11 @@ namespace GeradorExpressoes
 
                 if (i <= 1) {
                    //Grava a população gerada e seu fitness em cada rodada
-                   nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + "Geração_" + i.ToString() + "_";
-                   saida.escreveArquivo("Geração: " + i.ToString() + "\r\n" + population.toString(), nomearq, 1);
+                   nomearq = "Populacao" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + "Geracao_" + i.ToString() + "_";
+                   saida.escreveArquivo("Geracao: " + i.ToString() + "\r\n" + population.toString(), nomearq, 1);
 
                    nomearq = "AnalisedeTempo" + ((geneticMethod == 0) ? "_GP_" : "_GEP_") + dataset + "_" + executions.ToString() + "_" + iterations.ToString();
-                   saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Geração" + "\t" + "MMRE" + "\r\n", nomearq, 0);
+                   saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Geracao" + "\t" + "MMRE" + "\r\n", nomearq, 0);
                 }
 
                 // run one epoch of genetic algorithm
@@ -209,7 +209,7 @@ namespace GeradorExpressoes
             string resultado = "";
             resultado = "Expressão NPR gerada: " + expressao + "\r\n";
             resultado = resultado + "Expressão formatada 1: " + (RPN2Infix.PostfixToInfix(expressao)) + "\r\n";
-            resultado = resultado + "Expressão formatada 2: " + (RPN2Infix.Parse(expressao.Replace(",", "."))).Replace(".", ",") + "\r\n";
+            resultado = resultado + "Expressão formatada 2: " + (RPN2Infix.Parse(expressao.Replace(",", "."))) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução: " + expressaosubst + "\r\n";
             //resultado = resultado + "Expressão com substitução formatada: " + RPN2Infix.PostfixToInfix(expressaosubst) + "\r\n";
             //resultado = resultado + "Expressão NPR com substitução simplificada: " + expressaosimpl + "\r\n";

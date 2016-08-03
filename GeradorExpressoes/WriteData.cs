@@ -21,7 +21,7 @@ namespace GeradorExpressoes
             nomeArq += ".txt";
 
             //Declaração do método StreamWriter passando o caminho e nome do arquivo que deve ser salvo
-            StreamWriter writer = new StreamWriter(nomeArq, true);
+            StreamWriter writer = new StreamWriter(nomeArq, true, Encoding.ASCII);
 
             writer.Write(texto);
 

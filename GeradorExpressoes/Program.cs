@@ -16,10 +16,10 @@ namespace GeradorExpressoes
             System.Console.WriteLine("Inicio do Programa");
 
             // parametros para o inicio da execução
-            int execucoes = 30;
-            int indDataSet = 12;
+            int execucoes = 3;
+            int indDataSet = 3;
             int populationSize = 100;
-            int iterations = 50;
+            int iterations = 30000;
             int selectionMethod = 2;
             int functionsSet = 1;
             int geneticMethod = 0;
@@ -31,14 +31,14 @@ namespace GeradorExpressoes
             WriteData saida = new WriteData();
 
             //String nomearq = "Experimento" + ((geneticMethod == 0) ? "_GP_" : "_GEP_");
-            //saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Execução" + "\t" + "MMRE" + "\t" + "PRED(25)" + "\r\n", nomearq, 0);
+            //saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Execucao" + "\t" + "MMRE" + "\t" + "PRED(25)" + "\r\n", nomearq, 0);
 
             //para executar os experimentos com a GP e GEP conforme parametros acima
             for (int k = 0; k <= geneticMethod; k++) 
             {
 
                 String nomearq = "Experimento" + ((k == 0) ? "_GP_" : "_GEP_");
-                saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Execução" + "\t" + "MMRE" + "\t" + "PRED(25)" + "\r\n", nomearq, 0);
+                saida.escreveArquivo("DataSet" + "\t" + "Metodo" + "\t" + "Execucao" + "\t" + "MMRE" + "\t" + "PRED(25)" + "\r\n", nomearq, 0);
 
                 //para definir o dataset a ser utilizado conforme parametros acima
                 for (int j = 1; j <= indDataSet; j++)
